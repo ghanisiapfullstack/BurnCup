@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./burncup-be
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  frontend:
+    build: ./burncup-fe
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production

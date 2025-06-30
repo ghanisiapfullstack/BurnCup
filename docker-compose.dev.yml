@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./burncup-be
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./burncup-be:/app
+    ports:
+      - "8080:8080"
+    command: ["air"]
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: ./burncup-fe
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./burncup-fe:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - WATCHPACK_POLLING=true
