@@ -98,7 +98,7 @@ npm install      # one-time setup
 npm run dev      # starts Next.js with Turbopack (port 3000)
 ```
 
-Visit: [http://localhost:3000](http://localhost:3000)
+Visit: [http://127.0.0.1:3000](http://127.0.0.1:3000)
 
 #### For Backend (`burncup-be/`)
 
