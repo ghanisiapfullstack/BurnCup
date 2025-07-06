@@ -4,9 +4,9 @@ import { auth, signOut } from "@/lib/core/auth";
 import Image from "next/image";
 import '@/app/globals.css';
 import SignOutButton from "./signout_button";
+
 export default async function Header() {
     const session = await auth();
-    console.log("Session:", session);
 
     return (
         <header className="flex items-center justify-between px-4 py-1 bg-gradient-to-r from-gradient-left-primary to-gradient-right-primary text-[#0F3064]">
@@ -24,7 +24,7 @@ export default async function Header() {
                 <ul className="flex space-x-4">
                 <li><a href="/" className="hover:underline">Home</a></li>
                 <li><a href="/about" className="hover:underline">About</a></li>
-                <li><a href="/contact" className="hover:underline">Competition</a></li>
+                <li><a href="/competition" className="hover:underline">Competition</a></li>
                 <li><a href="/contact" className="hover:underline">Contact Us</a></li>
                 </ul>
             </nav>

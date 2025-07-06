@@ -1,0 +1,23 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
+export default function CompetitionRegisterButton({
+    competitionId,
+    className = "",
+}: {
+    competitionId: string;
+    className?: string;
+}) {
+    const router = useRouter();
+    return (
+        <button
+            onClick={() => {
+                router.push(`/register/${competitionId}`);
+            }}
+            className={`mt-4 px-6 py-2 bg-red text-white font-bold rounded-lg hover:opacity-90 transition-opacity ${className}`}
+        >
+            Register Now
+        </button>
+    );
+}

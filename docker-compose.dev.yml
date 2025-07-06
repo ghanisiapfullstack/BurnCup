@@ -10,6 +10,7 @@ services:
     command: ["air"]
     depends_on:
       - frontend
+      - postgres   # Add postgres as a dependency
 
   frontend:
     build:
@@ -25,3 +26,18 @@ services:
       - WATCHPACK_POLLING=true
     labels:
       - "com.microsoft.devcontainer.name=frontend"
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: burncup_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

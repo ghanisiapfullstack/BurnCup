@@ -1,13 +1,11 @@
-
-import Header from '@/components/common/header';
 import Image from 'next/image';
-import { signIn } from '@/lib/core/auth';
 import '@/app/globals.css';
+import EventTimeline from '@/components/home/event_timeline';
+import CompetitionCategoriesCard from '@/components/home/competition_categories_card';
 
 export default function Home() {
   return (
     <div>
-      <Header />
       {/* Hero Section */}
       <div className="w-screen h-[50vh]" style={{
         backgroundImage: 'url(/images/home_hero.png)',
@@ -26,21 +24,14 @@ export default function Home() {
             <p className='text-4xl font-bold text-text-primary'>Burncup 2025</p>
             <p className='text-2xl font-bold text-white'>COMPETE, EXPLORE, CONQUER</p>
             <p className='text-2xl font-font-semibold text-white'>The biggest internal competition event at Binus University Bekasi. Join us and showcase your talents!</p>
-            <button onClick={
-              async () => {
-                "use server"
-                await signIn("google")
-              }
-            } className='mt-4 px-6 py-2 bg-gradient-to-r from-gradient-left-primary to-gradient-right-primary text-text-secondary font-bold rounded-lg hover:opacity-90 transition-opacity'>
-              Register
-            </button>
+            
           </div>
         </div>
       </div>
 
       {/* About Section */}
-      <section className='mt-10'>
-        <div className='flex flex-row'>
+      <section className='mt-10 mb-20'>
+        <div className='flex flex-row items-center'>
           <div className='p-10 flex flex-col justify-center items-start space-y-4'>
             <h2 className='text-3xl font-bold text-text-secondary'>WHAT IS BURNCUP?</h2>
             <p className='text-lg text-text-secondary'>
@@ -50,8 +41,18 @@ export default function Home() {
               Kompetisi BurnCup 2025 hadir dengan konsep dan tema baru yaitu “The Global Odessey”. Dalam konteks acara ini, “The Global Odessey” melambangkan perjalanan penuh rintangan bagi peserta dalam meraih gelar juara. Adapun Slogan Burncup kali ini yaitu “Compete, Explore and Conquer”.
             </p>
           </div>
+          <Image
+            src="/images/burncup_mascot.png"
+            alt="About Burncup"
+            width={1000}
+            height={1000}
+            className='object-contain h-100'
+          />
         </div>
       </section>
+      <CompetitionCategoriesCard />
+
+      <EventTimeline />
     </div>
   );
 }
