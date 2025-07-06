@@ -1,9 +1,6 @@
-import Header from '@/components/common/header';
-
 export default function AboutPage() {
   return (
     <div>
-      <Header />
       <main className="p-10">
         <h1 className="text-4xl font-bold mb-4 text-center">The Burncup Journey</h1>
 
