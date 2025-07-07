@@ -6,6 +6,7 @@ import { AuthStep } from "./steps/auth-step"
 import { ProfileStep } from "./steps/profile-step"
 import { TeamStep } from "./steps/team-step"
 import { Competition } from "@/model/competition_model"
+import { useRouter } from "next/navigation"
 
 export function OnboardingStepper(
     {
@@ -16,6 +17,7 @@ export function OnboardingStepper(
 ) {
   const [currentStep, setCurrentStep] = useState(1)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const router = useRouter();
 
   const steps = [
     {
@@ -47,6 +49,8 @@ export function OnboardingStepper(
     }
     if (stepId < steps.length) {
       setCurrentStep(stepId + 1)
+    } else {
+      router.push(`/dashboard`);
     }
   }
 

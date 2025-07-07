@@ -5,7 +5,7 @@ import type React from "react"
 import { CheckCircle, Lock, User } from "lucide-react"
 import { useState, useEffect } from "react"
 import { getCurrentSession } from "@/lib/actions/actions"
-import { getToken } from "next-auth/jwt"
+import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
 
 interface ProfileStepProps {
   onComplete: () => void
@@ -17,6 +17,7 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
   const [isInitializing, setIsInitializing] = useState(true)
   const [accountEmail, setAccountEmail] = useState("")
   const [accountUsername, setAccountUsername] = useState("")
+  const [hasUserProfile, setHasUserProfile] = useState(false)
   const [formData, setFormData] = useState({
     userType: "binusian", // "binusian" or "non-binusian"
     fullName: "",
@@ -30,24 +31,27 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
   // Simulate loading profile data
   useEffect(() => {
     const loadProfileData = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 600))
       const session = await getCurrentSession();
       if (session) {
         const token = await (await fetch("/api/token")).json();
-        // If session exists, user is already authenticated
-        console.log("User is authenticated:", token.token)
         setAccountEmail(session.user!.email || "")
         setAccountUsername(session.user!.name || "")
 
+        // Load user profile data
         try {
-          const res = await fetch("http://localhost:8000/api/protected", {
-            headers: {
-              Authorization: `Bearer ${token.token}`,
-            },
-          });
-          console.log("Protected API status:", res.status);
-        } catch (err) {
-          console.error("Error fetching protected API:", err);
+          const userProfile = await fetchCurrentUser(token.token);
+          setHasUserProfile(!!userProfile)
+          setFormData({
+            userType: userProfile.binusian ? "binusian" : "non-binusian",
+            fullName: userProfile.fullName || "",
+            nim: userProfile.nim || "",
+            major: userProfile.major || "",
+            school: userProfile.school || "",
+            email: session.user!.email || "",
+            phone: userProfile.phoneNumber || "",
+          })
+        } catch (error) {
+          console.log("Failed to fetch user profile:", error)
         }
       }
 
@@ -59,11 +63,33 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (hasUserProfile) {
+      // If user profile already exists, just proceed
+      onComplete()
+      return
+    }
+
     setIsLoading(true)
     // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const token = await (await fetch("/api/token")).json();
+      const userProfile = {
+        binusian: formData.userType === "binusian",
+        fullName: formData.fullName,
+        phoneNumber: formData.phone,
+        email: accountEmail,
+        nim: formData.userType === "binusian" ? formData.nim : null,
+        major: formData.userType === "binusian" ? formData.major : null,
+        school: formData.userType === "non-binusian" ? formData.school : null,
+      };
+      await updateCurrentUser(token.token, userProfile);
+      setIsLoading(false)
+      onComplete()
+    } catch (error) {
+      console.error("Failed to update user profile:", error)
+    }
     setIsLoading(false)
-    onComplete()
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -156,9 +182,10 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
               <div className="space-y-2">
                 <label className="block text-sm font-semibold text-blue-900">Binusian/Non Binusian</label>
                 <select
+                  disabled={hasUserProfile}
                   value={formData.userType}
                   onChange={(e) => handleInputChange("userType", e.target.value)}
-                  className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50"
+                  className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50"
                 >
                   <option value="binusian">Binusian</option>
                   <option value="non-binusian">Non Binusian</option>
@@ -181,7 +208,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                       onChange={(e) => handleInputChange("fullName", e.target.value)}
                       placeholder="Enter your full name"
                       required
-                      className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={hasUserProfile}
+                      className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
 
@@ -197,7 +225,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                         onChange={(e) => handleInputChange("nim", e.target.value)}
                         placeholder="Enter your NIM"
                         required
-                        className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={hasUserProfile}
+                        className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   ) : (
@@ -211,7 +240,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                         onChange={(e) => handleInputChange("school", e.target.value)}
                         placeholder="Enter your school"
                         required
-                        className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={hasUserProfile}
+                        className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   )}
@@ -230,7 +260,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                         onChange={(e) => handleInputChange("major", e.target.value)}
                         placeholder="Enter your major"
                         required
-                        className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled={hasUserProfile}
+                        className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   )}
@@ -247,7 +278,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                       onChange={(e) => handleInputChange("phone", e.target.value)}
                       placeholder="Enter your phone number"
                       required
-                      className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      disabled={hasUserProfile}
+                      className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -255,10 +287,10 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
 
               <button
                 type="submit"
-                disabled={isLoading || !isFormValid()}
+                disabled={isLoading}
                 className="w-full bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "Saving Profile..." : "Complete Profile"}
+                {isLoading ? "Saving Profile..." : hasUserProfile ? "Proceed" : "Complete Profile"}
               </button>
             </form>
           </div>

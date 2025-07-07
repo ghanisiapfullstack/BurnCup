@@ -2,7 +2,7 @@
 
 import CompetitionRegisterButton from "@/components/competition/competition_register_button";
 import { OnboardingStepper } from "@/components/competition/onboarding_stepper";
-import { mockCompetitions } from "@/MockDatas/CompetitionMockData";
+import { fetchCompetitionByID } from "@/controller/competition_controller";
 
 export default async function CompetitionRegisterPage({
   params,
@@ -15,7 +15,12 @@ export default async function CompetitionRegisterPage({
         return <div>Loading...</div>
     }
 
-    const competition = mockCompetitions.find(c => c.id === compid);
+    let competition = null;
+    try {
+        competition = await fetchCompetitionByID(compid);
+    } catch (err) {
+        return <div className="p-10">Competition not found</div>;
+    }
 
     if (!competition) {
         return <div className="p-10">Competition not found</div>;

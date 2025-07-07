@@ -1,20 +1,25 @@
 "use server";
 
 import CompetitionRegisterButton from "@/components/competition/competition_register_button";
-import { mockCompetitions } from "@/MockDatas/CompetitionMockData";
+import { fetchCompetitionByID } from "@/controller/competition_controller";
 
 export default async function CompetitionDetailPage({
   params,
 }: {
   params: Promise<{ compid: string }>
 }) {
-    const { compid } = await params
+    const { compid } = await params;
 
     if (!compid) {
         return <div>Loading...</div>
     }
 
-    const competition = mockCompetitions.find(c => c.id === compid);
+    let competition = null;
+    try {
+        competition = await fetchCompetitionByID(compid);
+    } catch (err) {
+        return <div className="p-10">Competition not found</div>;
+    }
 
     if (!competition) {
         return <div className="p-10">Competition not found</div>;
@@ -83,8 +88,8 @@ export default async function CompetitionDetailPage({
                     <h3 className="text-2xl font-semibold text-text-secondary mb-3">Prizes</h3>
                     <div className="space-y-2">
                     {competition.prizes.map((prize, idx) => (
-                        <div>
-                            <span key={idx} className="text-text-secondary font-semibold">{prize.name}</span>
+                        <div key={idx}>
+                            <span className="text-text-secondary font-semibold">{prize.name}</span>
                             <p className="text-text-secondary">{prize.description}</p>
                         </div>
                     ))}

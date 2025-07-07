@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState, useEffect } from "react"
 import {
   Calendar,
@@ -13,195 +15,21 @@ import {
   MapPin,
   ChevronDown,
   ChevronUp,
+  Edit,
+  LogOut,
+  X,
+  Save,
+  Phone,
+  GraduationCap,
+  School,
 } from "lucide-react"
 
-// Mock data - replace with real API calls
-const mockCompetitions = [
-  {
-    id: 1,
-    name: "BURNCUP 2025 Basketball Tournament",
-    sport: "Basketball",
-    category: "Team Sport",
-    status: "registered",
-    registrationEndDate: "2025-02-15T23:59:59",
-    competitionStartDate: "2025-03-01T09:00:00",
-    venue: "Binus Bekasi Sports Hall",
-    registrationFee: "Rp 250.000",
-    paymentStatus: "pending",
-    maxTeamSize: 8,
-    team: {
-      id: 1,
-      name: "Thunder Bolts",
-      code: "TB2025",
-      leader: {
-        id: 1,
-        name: "Mike Johnson",
-        email: "mike.johnson@email.com",
-        phone: "+62 812-3456-7890",
-        nim: "2501234567",
-        major: "Computer Science",
-        userType: "binusian",
-      },
-      members: [
-        {
-          id: 2,
-          name: "Alex Chen",
-          email: "alex.chen@email.com",
-          phone: "+62 813-4567-8901",
-          nim: "2501234568",
-          major: "Information Systems",
-          userType: "binusian",
-        },
-        {
-          id: 3,
-          name: "Sarah Davis",
-          email: "sarah.davis@email.com",
-          phone: "+62 814-5678-9012",
-          school: "Jakarta International School",
-          userType: "non-binusian",
-        },
-      ],
-    },
-  },
-  {
-    id: 2,
-    name: "Futsal Championship 2025",
-    sport: "Futsal",
-    category: "Team Sport",
-    status: "registered",
-    registrationEndDate: "2025-02-20T23:59:59",
-    competitionStartDate: "2025-03-10T08:00:00",
-    venue: "Binus Alam Sutera Futsal Court",
-    registrationFee: "Rp 300.000",
-    paymentStatus: "paid",
-    maxTeamSize: 7,
-    team: {
-      id: 2,
-      name: "Goal Crushers",
-      code: "GC2025",
-      leader: {
-        id: 5,
-        name: "Roberto Silva",
-        email: "roberto.silva@email.com",
-        phone: "+62 816-7890-1234",
-        nim: "2501234570",
-        major: "International Business",
-        userType: "binusian",
-      },
-      members: [
-        {
-          id: 6,
-          name: "Ahmad Rizki",
-          email: "ahmad.rizki@email.com",
-          phone: "+62 817-8901-2345",
-          nim: "2501234571",
-          major: "Computer Engineering",
-          userType: "binusian",
-        },
-        {
-          id: 7,
-          name: "Kevin Tan",
-          email: "kevin.tan@email.com",
-          phone: "+62 818-9012-3456",
-          school: "Binus International School",
-          userType: "non-binusian",
-        },
-        {
-          id: 8,
-          name: "Dimas Pratama",
-          email: "dimas.pratama@email.com",
-          phone: "+62 819-0123-4567",
-          nim: "2501234572",
-          major: "Marketing",
-          userType: "binusian",
-        },
-      ],
-    },
-  },
-  {
-    id: 3,
-    name: "Badminton Singles Open 2025",
-    sport: "Badminton",
-    category: "Individual Sport",
-    status: "registered",
-    registrationEndDate: "2025-02-10T23:59:59",
-    competitionStartDate: "2025-02-25T07:00:00",
-    venue: "Binus Kemanggisan Sports Center",
-    registrationFee: "Rp 150.000",
-    paymentStatus: "paid",
-    maxTeamSize: 1,
-    team: {
-      id: 3,
-      name: "Individual Entry",
-      code: "BD2025",
-      leader: {
-        id: 9,
-        name: "Lisa Wong",
-        email: "lisa.wong@email.com",
-        phone: "+62 820-1234-5678",
-        nim: "2501234573",
-        major: "Psychology",
-        userType: "binusian",
-      },
-      members: [],
-    },
-  },
-  {
-    id: 4,
-    name: "E-Sports Mobile Legends Tournament",
-    sport: "Mobile Legends",
-    category: "E-Sports",
-    status: "registered",
-    registrationEndDate: "2025-02-28T23:59:59",
-    competitionStartDate: "2025-03-15T13:00:00",
-    venue: "Binus E-Sports Arena (Online)",
-    registrationFee: "Rp 200.000",
-    paymentStatus: "pending",
-    maxTeamSize: 5,
-    team: {
-      id: 4,
-      name: "Digital Warriors",
-      code: "DW2025",
-      leader: {
-        id: 10,
-        name: "Ryan Adiputra",
-        email: "ryan.adiputra@email.com",
-        phone: "+62 821-2345-6789",
-        nim: "2501234574",
-        major: "Game Application Technology",
-        userType: "binusian",
-      },
-      members: [
-        {
-          id: 11,
-          name: "Farel Gunawan",
-          email: "farel.gunawan@email.com",
-          phone: "+62 822-3456-7890",
-          nim: "2501234575",
-          major: "Computer Science",
-          userType: "binusian",
-        },
-        {
-          id: 12,
-          name: "Jessica Lim",
-          email: "jessica.lim@email.com",
-          phone: "+62 823-4567-8901",
-          school: "Pelita Harapan University",
-          userType: "non-binusian",
-        },
-        {
-          id: 13,
-          name: "Budi Santoso",
-          email: "budi.santoso@email.com",
-          phone: "+62 824-5678-9012",
-          nim: "2501234576",
-          major: "Information Systems",
-          userType: "binusian",
-        },
-      ],
-    },
-  },
-]
+import { User as UserModel } from "@/model/user_model"
+import { Team } from "@/model/team_model"
+import { fetchCurrentUser } from "@/controller/user_controller"
+import { getCurrentSession } from "@/lib/actions/actions"
+import { fetchCurrentTeams } from "@/controller/team_controller"
+import { Session } from "next-auth"
 
 interface TimeLeft {
   days: number
@@ -239,8 +67,8 @@ function CountdownTimer({ targetDate, label }: { targetDate: string; label: stri
 
   if (isExpired) {
     return (
-      <div className="text-center p-4 bg-red-50 border border-red-200 rounded-lg">
-        <p className="text-red-600 font-semibold">{label} has ended</p>
+      <div className="text-center p-3 md:p-4 bg-red-50 border border-red-200 rounded-lg">
+        <p className="text-red-600 font-semibold text-sm md:text-base">{label} has ended</p>
       </div>
     )
   }
@@ -248,21 +76,21 @@ function CountdownTimer({ targetDate, label }: { targetDate: string; label: stri
   return (
     <div className="text-center">
       <p className="text-sm font-medium text-gray-600 mb-2">{label}</p>
-      <div className="grid grid-cols-4 gap-2">
-        <div className="bg-blue-600 text-white p-2 rounded-lg">
-          <div className="text-lg font-bold">{timeLeft.days}</div>
+      <div className="grid grid-cols-4 gap-1 md:gap-2">
+        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+          <div className="text-sm md:text-lg font-bold">{timeLeft.days}</div>
           <div className="text-xs">Days</div>
         </div>
-        <div className="bg-blue-600 text-white p-2 rounded-lg">
-          <div className="text-lg font-bold">{timeLeft.hours}</div>
+        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+          <div className="text-sm md:text-lg font-bold">{timeLeft.hours}</div>
           <div className="text-xs">Hours</div>
         </div>
-        <div className="bg-blue-600 text-white p-2 rounded-lg">
-          <div className="text-lg font-bold">{timeLeft.minutes}</div>
+        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+          <div className="text-sm md:text-lg font-bold">{timeLeft.minutes}</div>
           <div className="text-xs">Minutes</div>
         </div>
-        <div className="bg-blue-600 text-white p-2 rounded-lg">
-          <div className="text-lg font-bold">{timeLeft.seconds}</div>
+        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+          <div className="text-sm md:text-lg font-bold">{timeLeft.seconds}</div>
           <div className="text-xs">Seconds</div>
         </div>
       </div>
@@ -280,17 +108,17 @@ function QRCodePayment({ amount, teamCode }: { amount: string; teamCode: string 
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
       <div className="text-center mb-4">
-        <h4 className="text-lg font-semibold text-gray-900 mb-2">Payment QR Code</h4>
+        <h4 className="text-base md:text-lg font-semibold text-gray-900 mb-2">Payment QR Code</h4>
         <p className="text-sm text-gray-600">Scan to pay registration fee: {amount}</p>
       </div>
 
       {/* QR Code Placeholder */}
       <div className="flex justify-center mb-4">
-        <div className="w-48 h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+        <div className="w-32 h-32 md:w-48 md:h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
           <div className="text-center">
-            <QrCode className="w-16 h-16 text-gray-400 mx-auto mb-2" />
+            <QrCode className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-2" />
             <p className="text-sm text-gray-500">QR Code</p>
             <p className="text-xs text-gray-400">Payment Gateway</p>
           </div>
@@ -300,7 +128,9 @@ function QRCodePayment({ amount, teamCode }: { amount: string; teamCode: string 
       <div className="text-center">
         <p className="text-sm text-gray-600 mb-2">Team Code for Reference:</p>
         <div className="flex items-center justify-center space-x-2">
-          <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg font-mono font-semibold">{teamCode}</span>
+          <span className="bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base">
+            {teamCode}
+          </span>
           <button onClick={copyTeamCode} className="p-1 text-gray-500 hover:text-blue-600 transition-colors">
             {copied ? <CheckCircle className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
           </button>
@@ -311,7 +141,7 @@ function QRCodePayment({ amount, teamCode }: { amount: string; teamCode: string 
   )
 }
 
-function TeamMemberCard({ member, isLeader = false }: { member: any; isLeader?: boolean }) {
+function TeamMemberCard({ member, isLeader = false }: { member: UserModel; isLeader?: boolean }) {
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start space-x-3">
@@ -320,7 +150,7 @@ function TeamMemberCard({ member, isLeader = false }: { member: any; isLeader?: 
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
-            <h4 className="text-sm font-semibold text-gray-900 truncate">{member.name}</h4>
+            <h4 className="text-sm font-semibold text-gray-900 truncate">{member.fullName}</h4>
             {isLeader && (
               <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
                 Leader
@@ -328,9 +158,9 @@ function TeamMemberCard({ member, isLeader = false }: { member: any; isLeader?: 
             )}
           </div>
           <p className="text-xs text-gray-600 mb-1">{member.email}</p>
-          <p className="text-xs text-gray-600 mb-2">{member.phone}</p>
+          <p className="text-xs text-gray-600 mb-2">{member.phoneNumber}</p>
 
-          {member.userType === "binusian" ? (
+          {member.binusian == true ? (
             <div className="space-y-1">
               <p className="text-xs text-blue-600">
                 <span className="font-medium">NIM:</span> {member.nim}
@@ -350,22 +180,205 @@ function TeamMemberCard({ member, isLeader = false }: { member: any; isLeader?: 
   )
 }
 
+function EditProfileModal({
+  user,
+  isOpen,
+  onClose,
+  onSave,
+}: {
+  user: UserModel
+  isOpen: boolean
+  onClose: () => void
+  onSave: (userData: UserModel) => void
+}) {
+  const [formData, setFormData] = useState(user)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setFormData(user)
+  }, [user])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    onSave(formData)
+    setIsLoading(false)
+    onClose()
+  }
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  if (!isOpen) return null
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-900">Edit Profile</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
+            <X className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-4 md:p-6 space-y-4 md:space-y-6">
+          {/* User Type Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-gray-900">User Type</label>
+            <select
+              value={user.binusian ? "binusian" : "non-binusian"}
+              onChange={(e) => {}}
+              className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50 text-sm md:text-base"
+            >
+              <option value="binusian">Binusian</option>
+              <option value="non-binusian">Non Binusian</option>
+            </select>
+          </div>
+
+          {/* Personal Information */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                value={formData.fullName}
+                onChange={(e) => handleInputChange("fullName", e.target.value)}
+                placeholder="Enter your full name"
+                required
+                className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                Phone Number
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={(e) => handleInputChange("phone", e.target.value)}
+                placeholder="Enter your phone number"
+                required
+                className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+              />
+            </div>
+
+            {/* Conditional Fields */}
+            {formData.binusian === true ? (
+              <>
+                <div className="space-y-2">
+                  <label htmlFor="nim" className="block text-sm font-medium text-gray-700">
+                    NIM
+                  </label>
+                  <input
+                    id="nim"
+                    value={formData.nim!}
+                    onChange={(e) => handleInputChange("nim", e.target.value)}
+                    placeholder="Enter your NIM"
+                    required
+                    className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label htmlFor="major" className="block text-sm font-medium text-gray-700">
+                    Major
+                  </label>
+                  <input
+                    id="major"
+                    value={formData.major!}
+                    onChange={(e) => handleInputChange("major", e.target.value)}
+                    placeholder="Enter your major"
+                    required
+                    className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                  />
+                </div>
+              </>
+            ) : (
+              <div className="space-y-2 md:col-span-2">
+                <label htmlFor="school" className="block text-sm font-medium text-gray-700">
+                  School
+                </label>
+                <input
+                  id="school"
+                  value={formData.school!}
+                  onChange={(e) => handleInputChange("school", e.target.value)}
+                  placeholder="Enter your school"
+                  required
+                  className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full sm:w-auto px-4 md:px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm md:text-base"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full sm:w-auto px-4 md:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm md:text-base"
+            >
+              <Save className="w-4 h-4" />
+              <span>{isLoading ? "Saving..." : "Save Changes"}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
 export function Dashboard() {
-  const [competitions] = useState(mockCompetitions)
+  const [competitions, setCompetitions] = useState<Team[] | null>(null)
+  const [user, setUser] = useState<UserModel | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [expandedCompetitions, setExpandedCompetitions] = useState<Set<number>>(new Set())
+  const [expandedCompetitions, setExpandedCompetitions] = useState<Set<string>>(new Set())
+  const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
+  const [session, setSession] = useState<Session | null>(null)
 
   useEffect(() => {
     // Simulate loading dashboard data
     const loadDashboard = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      setIsLoading(false)
+      const session = await getCurrentSession();
+      setSession(session);
+      if (session) {
+        const token = await (await fetch("/api/token")).json();
+        // Load user profile data
+        try {
+          const userProfile = await fetchCurrentUser(token.token);
+          setUser(userProfile);
+
+          const comps = await fetchCurrentTeams(token.token) as Team[];
+          comps.forEach((competition) => {
+            if (competition.members == null) {
+              competition.members = [];
+            }
+          });
+          setCompetitions(comps);
+          setIsLoading(false);
+        } catch (error) {
+          console.log("Failed to fetch user profile:", error)
+        }
     }
+  }
+  loadDashboard();
+}, [])
 
-    loadDashboard()
-  }, [])
-
-  const toggleCompetition = (competitionId: number) => {
+  const toggleCompetition = (competitionId: string) => {
     const newExpanded = new Set(expandedCompetitions)
     if (newExpanded.has(competitionId)) {
       newExpanded.delete(competitionId)
@@ -376,11 +389,24 @@ export function Dashboard() {
   }
 
   const expandAll = () => {
-    setExpandedCompetitions(new Set(competitions.map((c) => c.id)))
+    setExpandedCompetitions(new Set(competitions?.map((c) => c.id)))
   }
 
   const collapseAll = () => {
     setExpandedCompetitions(new Set())
+  }
+
+  const handleLogout = () => {
+    // Simulate logout
+    if (confirm("Are you sure you want to logout?")) {
+      alert("Logged out successfully!")
+      // In real app, redirect to login page
+    }
+  }
+
+  const handleSaveProfile = (userData: UserModel) => {
+    setUser(userData)
+    alert("Profile updated successfully!")
   }
 
   if (isLoading) {
@@ -398,219 +424,362 @@ export function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 py-8 px-4">
+      <div className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 py-6 md:py-8 px-4">
         <div className="container mx-auto">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             <div>
-              <h1 className="text-3xl font-bold text-blue-900 mb-2">Sports Dashboard</h1>
-              <p className="text-blue-800">
-                Welcome back! Here are your registered competitions across different sports.
+              <h1 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Sports Dashboard</h1>
+              <p className="text-sm md:text-base text-blue-800">
+                Welcome back, <span className="font-semibold">{user?.fullName}</span>!
+              </p>
+              <p className="text-sm md:text-base text-blue-800 hidden md:block">
+                Here are your registered competitions across different sports.
               </p>
             </div>
-            <div className="text-right">
-              <div className="inline-block bg-blue-900 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                Multi-Sport Athlete
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+              <div className="text-left sm:text-right">
+                <div className="inline-block bg-blue-900 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold">
+                  Multi-Sport Athlete
+                </div>
               </div>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 text-sm md:text-base"
+              >
+                <LogOut className="w-3 h-3 md:w-4 md:h-4" />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto py-8 px-4">
-        {competitions.length === 0 ? (
-          <div className="text-center py-12">
-            <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No Competitions Yet</h3>
-            <p className="text-gray-500 mb-6">You haven't registered for any competitions yet.</p>
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-              Browse Competitions
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {/* Accordion Controls */}
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">My Competitions ({competitions.length})</h2>
-              <div className="flex space-x-2">
-                <button
-                  onClick={expandAll}
-                  className="text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded-lg transition-colors"
-                >
-                  Expand All
-                </button>
-                <button
-                  onClick={collapseAll}
-                  className="text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-lg transition-colors"
-                >
-                  Collapse All
-                </button>
+      <div className="container mx-auto py-4 md:py-8 px-4">
+        {/* Mobile Profile Card - Only visible on mobile */}
+        <div className="lg:hidden mb-6">
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <User className="w-8 h-8 text-blue-600" />
               </div>
-            </div>
-
-            {/* Accordion Items */}
-            {competitions.map((competition) => {
-              const isExpanded = expandedCompetitions.has(competition.id)
-
-              return (
-                <div
-                  key={competition.id}
-                  className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden transition-all duration-200"
-                >
-                  {/* Accordion Header - Always Visible */}
-                  <div
-                    className="bg-blue-600 text-white p-4 cursor-pointer hover:bg-blue-700 transition-colors"
-                    onClick={() => toggleCompetition(competition.id)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-3">
-                          <h3 className="text-xl font-bold">{competition.name}</h3>
-                          <span className="bg-blue-500 text-blue-100 px-2 py-1 rounded-full text-xs font-medium">
-                            {competition.sport}
-                          </span>
-                          <span className="bg-blue-800 text-blue-200 px-2 py-1 rounded-full text-xs font-medium">
-                            {competition.category}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-4">
-                        <div className="text-right text-sm">
-                          <div className="flex items-center space-x-2 mb-1">
-                            <MapPin className="w-3 h-3" />
-                            <span className="text-blue-100">{competition.venue}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Trophy className="w-3 h-3" />
-                            <span className="text-blue-100">{competition.registrationFee}</span>
-                          </div>
-                        </div>
-
-                        <span
-                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                            competition.paymentStatus === "pending"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-green-100 text-green-800"
-                          }`}
-                        >
-                          {competition.paymentStatus === "pending" ? "Payment Pending" : "Paid"}
-                        </span>
-
-                        <div className="flex items-center">
-                          {isExpanded ? (
-                            <ChevronUp className="w-5 h-5 text-blue-200" />
-                          ) : (
-                            <ChevronDown className="w-5 h-5 text-blue-200" />
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Accordion Content - Expandable */}
-                  <div
-                    className={`transition-all duration-300 ease-in-out ${
-                      isExpanded ? "max-h-none opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-900 truncate">{user?.fullName}</h3>
+                <p className="text-sm text-gray-600 truncate">{session?.user?.email}</p>
+                <div className="flex items-center space-x-2 mt-1">
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                      user?.binusian === true ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
                     }`}
                   >
-                    <div className="p-6">
-                      <div className="grid lg:grid-cols-3 gap-6">
-                        {/* Countdown Timers */}
-                        <div className="space-y-6">
-                          <CountdownTimer targetDate={competition.registrationEndDate} label="Registration Ends In" />
-                          <CountdownTimer targetDate={competition.competitionStartDate} label="Competition Starts In" />
-                        </div>
+                    {user?.binusian === true ? "Binusian" : "Non-Binusian"}
+                  </span>
+                  <span className="text-xs text-gray-500">{competitions?.length} Competitions</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsEditProfileOpen(true)}
+                className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors flex-shrink-0"
+              >
+                <Edit className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
 
-                        {/* Payment QR Code */}
-                        <div>
-                          <QRCodePayment amount={competition.registrationFee} teamCode={competition.team.code} />
-                        </div>
+        <div className="grid lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* Desktop Profile Sidebar - Hidden on mobile */}
+          <div className="hidden lg:block lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sticky top-8">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <User className="w-10 h-10 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-1">{user?.fullName}</h3>
+                <p className="text-sm text-gray-600 mb-2">{session?.user?.email}</p>
+                <span
+                  className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                    user?.binusian === true ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                  }`}
+                >
+                  {user?.binusian === true ? "Binusian" : "Non-Binusian"}
+                </span>
+              </div>
 
-                        {/* Team Information */}
-                        <div className="space-y-4">
-                          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                            <div className="flex items-center justify-between mb-3">
-                              <h4 className="text-lg font-semibold text-blue-900">
-                                {competition.category === "Individual Sport" ? "Participant Info" : "Team Information"}
-                              </h4>
-                              <Users className="w-5 h-5 text-blue-600" />
-                            </div>
-                            <div className="space-y-2">
-                              {competition.category !== "Individual Sport" && (
-                                <>
-                                  <div>
-                                    <span className="text-sm font-medium text-gray-600">Team Name:</span>
-                                    <p className="text-lg font-bold text-blue-900">{competition.team.name}</p>
-                                  </div>
-                                  <div>
-                                    <span className="text-sm font-medium text-gray-600">Team Code:</span>
-                                    <p className="text-lg font-mono font-bold text-blue-900">{competition.team.code}</p>
-                                  </div>
-                                </>
-                              )}
-                              <div>
-                                <span className="text-sm font-medium text-gray-600">
-                                  {competition.category === "Individual Sport" ? "Category:" : "Total Members:"}
+              <div className="space-y-4 mb-6">
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm text-gray-600">{user?.phoneNumber}</span>
+                </div>
+
+                {user?.binusian === true ? (
+                  <>
+                    <div className="flex items-center space-x-3">
+                      <GraduationCap className="w-4 h-4 text-gray-400" />
+                      <span className="text-sm text-gray-600">NIM: {user.nim}</span>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <GraduationCap className="w-4 h-4 text-gray-400" />
+                      <span className="text-sm text-gray-600">{user.major}</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex items-center space-x-3">
+                    <School className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-gray-600">{user?.school}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center space-x-3">
+                  <Trophy className="w-4 h-4 text-gray-400" />
+                  <span className="text-sm text-gray-600">{competitions?.length} Competitions</span>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setIsEditProfileOpen(true)}
+                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+              >
+                <Edit className="w-4 h-4" />
+                <span>Edit Profile</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Competitions Section */}
+          <div className="lg:col-span-3">
+            {competitions?.length === 0 ? (
+              <div className="text-center py-8 md:py-12">
+                <Trophy className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg md:text-xl font-semibold text-gray-700 mb-2">No Competitions Yet</h3>
+                <p className="text-sm md:text-base text-gray-500 mb-6">
+                  You haven't registered for any competitions yet.
+                </p>
+                <button className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm md:text-base">
+                  Browse Competitions
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Accordion Controls */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0 mb-4 md:mb-6">
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                    My Competitions ({competitions?.length})
+                  </h2>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={expandAll}
+                      className="text-xs md:text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 px-2 py-1 md:px-3 md:py-1 rounded-lg transition-colors"
+                    >
+                      Expand All
+                    </button>
+                    <button
+                      onClick={collapseAll}
+                      className="text-xs md:text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-2 py-1 md:px-3 md:py-1 rounded-lg transition-colors"
+                    >
+                      Collapse All
+                    </button>
+                  </div>
+                </div>
+
+                {/* Accordion Items */}
+                {competitions?.map((competition) => {
+                  const isExpanded = expandedCompetitions.has(competition.id)
+
+                  return (
+                    <div
+                      key={competition.id}
+                      className="bg-white rounded-lg shadow-lg border border-gray-200 overflow-hidden transition-all duration-200"
+                    >
+                      {/* Accordion Header - Always Visible */}
+                      <div
+                        className="bg-blue-600 text-white p-3 md:p-4 cursor-pointer hover:bg-blue-700 transition-colors"
+                        onClick={() => toggleCompetition(competition.id)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1 min-w-0 mr-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
+                              <h3 className="text-lg md:text-xl font-bold truncate">{competition.competition.name}</h3>
+                              <div className="flex flex-wrap gap-1">
+                                <span className="bg-blue-500 text-blue-100 px-2 py-0.5 rounded-full text-xs font-medium">
+                                  {competition.competition.competitionType}
                                 </span>
-                                <p className="text-lg font-bold text-blue-900">
-                                  {competition.category === "Individual Sport"
-                                    ? "Individual Participant"
-                                    : `${competition.team.members.length + 1} Players`}
-                                </p>
+                                <span className="bg-blue-800 text-blue-200 px-2 py-0.5 rounded-full text-xs font-medium">
+                                  {competition.competition.category}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Mobile-specific info */}
+                            <div className="mt-2 sm:hidden">
+                              <div className="flex items-center space-x-2 text-xs text-blue-100">
+                                <MapPin className="w-3 h-3" />
+                                <span className="truncate">{competition.competition.venue}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                            {/* Desktop info - hidden on mobile */}
+                            <div className="hidden sm:block text-right text-sm">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <MapPin className="w-3 h-3" />
+                                <span className="text-blue-100">{competition.competition.venue}</span>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <Trophy className="w-3 h-3" />
+                                <span className="text-blue-100">{competition.competition.registrationfee}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                              <span
+                                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  competition.isPaid === false
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-green-100 text-green-800"
+                                }`}
+                              >
+                                {competition.isPaid === false ? "Pending" : "Paid"}
+                              </span>
+
+                              <div className="flex items-center">
+                                {isExpanded ? (
+                                  <ChevronUp className="w-5 h-5 text-blue-200" />
+                                ) : (
+                                  <ChevronDown className="w-5 h-5 text-blue-200" />
+                                )}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* Team Members */}
-                      <div className="mt-8">
-                        <h4 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                          <Users className="w-5 h-5 mr-2" />
-                          {competition.category === "Individual Sport" ? "Participant Details" : "Team Members"}
-                        </h4>
+                      {/* Accordion Content - Expandable */}
+                      <div
+                        className={`transition-all duration-300 ease-in-out ${
+                          isExpanded ? "max-h-none opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+                        }`}
+                      >
+                        <div className="p-4 md:p-6">
+                          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+                            {/* Countdown Timers */}
+                            <div className="space-y-4 md:space-y-6">
+                              <CountdownTimer
+                                targetDate={competition.competition.registrationEndDate}
+                                label="Registration Ends In"
+                              />
+                              <CountdownTimer
+                                targetDate={competition.competition.competitionStartDate}
+                                label="Competition Starts In"
+                              />
+                            </div>
 
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                          {/* Team Leader / Individual Participant */}
-                          <TeamMemberCard
-                            member={competition.team.leader}
-                            isLeader={competition.category !== "Individual Sport"}
-                          />
+                            {/* Payment QR Code */}
+                            <div className="order-last lg:order-none">
+                              <QRCodePayment amount={competition.competition.registrationfee.toString()} teamCode={competition.teamCode} />
+                            </div>
 
-                          {/* Team Members (only for team sports) */}
-                          {competition.category !== "Individual Sport" &&
-                            competition.team.members.map((member) => (
-                              <TeamMemberCard key={member.id} member={member} />
-                            ))}
+                            {/* Team Information */}
+                            <div className="space-y-4">
+                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <div className="flex items-center justify-between mb-3">
+                                  <h4 className="text-base md:text-lg font-semibold text-blue-900">
+                                    {competition.competition.maxMembers == null
+                                      ? "Participant Info"
+                                      : "Team Information"}
+                                  </h4>
+                                  <Users className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
+                                </div>
+                                <div className="space-y-2">
+                                  {competition.competition.maxMembers != null && (
+                                    <>
+                                      <div>
+                                        <span className="text-sm font-medium text-gray-600">Team Name:</span>
+                                        <p className="text-base md:text-lg font-bold text-blue-900">
+                                          {competition.teamName}
+                                        </p>
+                                      </div>
+                                      <div>
+                                        <span className="text-sm font-medium text-gray-600">Team Code:</span>
+                                        <p className="text-base md:text-lg font-mono font-bold text-blue-900">
+                                          {competition.teamCode}
+                                        </p>
+                                      </div>
+                                    </>
+                                  )}
+                                  <div>
+                                    <span className="text-sm font-medium text-gray-600">
+                                      {competition.competition.maxMembers == null ? "Category:" : "Total Members:"}
+                                    </span>
+                                    <p className="text-base md:text-lg font-bold text-blue-900">
+                                      {competition.competition.maxMembers == null
+                                        ? "Individual Participant"
+                                        : `${competition.members.length + 1} Players`}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Team Members */}
+                          <div className="mt-6 md:mt-8">
+                            <h4 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 flex items-center">
+                              <Users className="w-4 h-4 md:w-5 md:h-5 mr-2" />
+                              {competition.competition.maxMembers == null ? "Participant Details" : "Team Members"}
+                            </h4>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {/* Team Leader / Individual Participant */}
+                              <TeamMemberCard
+                                member={competition.teamLeader}
+                                isLeader={competition.competition.maxMembers != null}
+                              />
+
+                              {/* Team Members (only for team sports) */}
+                              {competition.competition.maxMembers != null &&
+                                competition.members.map((member) => (
+                                  <TeamMemberCard key={member.fullName} member={member} />
+                                ))}
+                            </div>
+                          </div>
+
+                          {/* Action Buttons */}
+                          <div className="mt-6 md:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
+                            {competition.isPaid === false && (
+                              <button className="bg-green-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
+                                <QrCode className="w-4 h-4" />
+                                <span>Complete Payment</span>
+                              </button>
+                            )}
+                            <button className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
+                              <Calendar className="w-4 h-4" />
+                              <span>View Schedule</span>
+                            </button>
+                            <button className="border border-gray-300 text-gray-700 px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
+                              <Users className="w-4 h-4" />
+                              <span>Manage Team</span>
+                            </button>
+                          </div>
                         </div>
                       </div>
-
-                      {/* Action Buttons */}
-                      <div className="mt-8 flex flex-wrap gap-4">
-                        {competition.paymentStatus === "pending" && (
-                          <button className="bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center space-x-2">
-                            <QrCode className="w-4 h-4" />
-                            <span>Complete Payment</span>
-                          </button>
-                        )}
-                        <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center space-x-2">
-                          <Calendar className="w-4 h-4" />
-                          <span>View Schedule</span>
-                        </button>
-                        <button className="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center space-x-2">
-                          <Users className="w-4 h-4" />
-                          <span>Manage Team</span>
-                        </button>
-                      </div>
                     </div>
-                  </div>
-                </div>
-              )
-            })}
+                  )
+                })}
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      <EditProfileModal
+        user={user!}
+        isOpen={isEditProfileOpen}
+        onClose={() => setIsEditProfileOpen(false)}
+        onSave={handleSaveProfile}
+      />
     </div>
   )
 }

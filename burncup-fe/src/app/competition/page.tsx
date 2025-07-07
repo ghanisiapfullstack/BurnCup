@@ -3,8 +3,10 @@
 import Header from "@/components/common/header";
 import CategoryBadgeButton from "@/components/competition/category_badge_button";
 import CompetitionCard from "@/components/competition/competition_card";
-import { mockCompetitions } from "@/MockDatas/CompetitionMockData";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import type { Competition } from "@/model/competition_model";
+import { fetchCompetitions } from "@/controller/competition_controller";
 
 const categories = [
   "All Categories",
@@ -18,6 +20,17 @@ export default function CompetitionPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedCategory = searchParams.get("category");
+
+  const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchCompetitions()
+      .then((data) => setCompetitions(data))
+      .catch(() => setCompetitions([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div>
@@ -46,18 +59,22 @@ export default function CompetitionPage() {
       </div>
       <div className="mt-10">
         <h2 className="text-2xl font-semibold text-center mb-6">Competitions</h2>
-        <div className="p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockCompetitions.map((competition) => (
-            <CompetitionCard
-              key={competition.id}
-              competition={competition}
-              onClick={() => {
-                router.push(`/competition/${competition.id}`);
-              }}
-            />
-          ))}
-        </div>
-    </div>
+        {loading ? (
+          <div className="text-center py-20 text-lg text-gray-500">Loading competitions...</div>
+        ) : (
+          <div className="p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {competitions.map((competition) => (
+              <CompetitionCard
+                key={competition.id}
+                competition={competition}
+                onClick={() => {
+                  router.push(`/competition/${competition.id}`);
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

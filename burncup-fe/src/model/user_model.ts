@@ -1,6 +1,7 @@
 export interface User {
     binusian: boolean;
     fullName: string;
+    email: string;
     phoneNumber: string;
     // Binusian specific
     nim?: string | null;

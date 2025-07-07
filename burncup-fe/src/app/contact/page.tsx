@@ -3,7 +3,6 @@ import Header from '@/components/common/header';
 export default function ContactPage() {
   return (
     <div>
-      <Header />
       <main className="p-10 max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center">Contact Person</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -5,6 +5,7 @@ import type React from "react"
 import { Users, Plus, Search, Trophy } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Competition } from "@/model/competition_model"
+import { CreateTeam } from "@/controller/team_controller"
 
 interface TeamStepProps {
   onComplete: () => void
@@ -18,10 +19,7 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
   const [selectedTeam, setSelectedTeam] = useState<number | null>(null)
   const [isSingleTeam, setIsSingleTeam] = useState(false)
   const [activeTab, setActiveTab] = useState("join")
-  const [teamData, setTeamData] = useState({
-    name: "",
-    description: "",
-  })
+  const [teamName, setTeamName] = useState("")
   const [teamCode, setTeamCode] = useState("")
 
   // Simulate loading teams data
@@ -44,9 +42,15 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
   const handleCreateTeam = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const token = await (await fetch("/api/token")).json();
+      await CreateTeam(token.token, teamName, competition.id.toString())
+      setIsLoading(false)
+      onComplete()
+    } catch (error) {
+      console.error("Error creating team:", error)
+    }
     setIsLoading(false)
-    onComplete()
   }
 
   const handleJoinTeam = async (teamId: number) => {
@@ -183,8 +187,8 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                     </label>
                     <input
                       id="teamName"
-                      value={teamData.name}
-                      onChange={(e) => setTeamData((prev) => ({ ...prev, name: e.target.value }))}
+                      value={teamName}
+                      onChange={(e) => setTeamName(e.target.value)}
                       placeholder="Enter your team name"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -192,17 +196,15 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="teamDescription" className="block text-sm font-medium text-gray-700">
-                      Team Description *
+                    <label htmlFor="compName" className="block text-sm font-medium text-gray-700">
+                      Competition Name
                     </label>
-                    <textarea
-                      id="teamDescription"
-                      value={teamData.description}
-                      onChange={(e) => setTeamData((prev) => ({ ...prev, description: e.target.value }))}
-                      placeholder="Describe your team's playing style, goals, and what you're looking for in teammates..."
-                      rows={4}
-                      required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    <input
+                      id="compName"
+                      value={competition.name}
+                      onChange={(e) => {}}
+                      disabled
+                      className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
 
@@ -215,8 +217,8 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                       type="number"
                       value={competition.maxMembers ? competition.maxMembers : 1}
                       disabled={true}
-                      onChange={(e) => setTeamData((prev) => ({ ...prev, maxMembers: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      onChange={(e) => {}}
+                      className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <p className="text-sm text-gray-500">
                       {isSingleTeam ? 'This is a solo competition (max 1 member)' : `Competition rules require ${competition.minMembers}-${competition.maxMembers} players per team`}
@@ -225,7 +227,7 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
 
                   <button
                     type="submit"
-                    disabled={isLoading || !teamData.name || !teamData.description}
+                    disabled={isLoading || !teamName}
                     className="w-full bg-blue-600 text-white hover:bg-blue-700 px-4 py-3 rounded-lg font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? "Creating Team..." : "Create Team"}

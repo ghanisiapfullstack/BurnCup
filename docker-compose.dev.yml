@@ -6,7 +6,7 @@ services:
     volumes:
       - ./burncup-be:/app
     ports:
-      - "8080:8080"
+      - "8000:8000"
     command: ["air"]
     depends_on:
       - frontend
