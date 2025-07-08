@@ -1,4 +1,29 @@
-import Header from '@/components/common/header';
+const contactData = [
+  {
+    name: "Vinesya",
+    whatsapp: "+62 895-1247-5542",
+    whatsappLink: "https://wa.me/628951245542",
+    line: "@vinesya"
+  },
+  {
+    name: "Jeanne",
+    whatsapp: "+62 857-6210-8017",
+    whatsappLink: "https://wa.me/6285762108017",
+    line: "@jeanne"
+  },
+  {
+    name: "Raka",
+    whatsapp: "+62 878-7921-7838",
+    whatsappLink: "https://wa.me/6287879217838",
+    line: "@Khizukikh"
+  },
+  {
+    name: "Fidel",
+    whatsapp: "+62 878-5132-7818",
+    whatsappLink: "https://wa.me/6287851327818",
+    line: "@vido"
+  }
+]
 
 export default function ContactPage() {
   return (
@@ -6,72 +31,25 @@ export default function ContactPage() {
       <main className="p-10 max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold mb-6 text-center">Contact Person</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Contact 1 */}
-          <div className="bg-[#F4C261] rounded-xl shadow p-6 flex items-center gap-4 w-full">
-            {/* Profile image or initial */}
-            <div className="w-20 h-20 bg-[#001F54] rounded-full flex items-center justify-center text-3xl text-[#F4C261] font-bold">
-              A
+          {contactData.map((contact) => (
+              <div key={contact.name} className="bg-[#F4C261] rounded-xl shadow p-6 flex items-center gap-4 w-full">
+                {/* Profile image or initial */}
+                <div className="w-20 h-20 bg-[#001F54] rounded-full flex items-center justify-center text-3xl text-[#F4C261] font-bold">
+                  {contact.name.charAt(0).toUpperCase()}
+                </div>
+                {/* Info */}
+                <div className="flex flex-col justify-center">
+                  <div className="text-xl font-semibold mb-1">{contact.name}</div>
+                  {/* <div className="text-gray-700 mb-1">Event Coordinator</div> */}
+                  <div className="text-gray-700 text-sm">
+                    <span className="font-semibold">WhatsApp:</span> <a href={contact.whatsappLink} className="underline">{contact.whatsapp}</a>
+                  </div>
+                  <div className="text-gray-700 text-sm">
+                    <span className="font-semibold">Line ID:</span> {contact.line}
+                  </div>
+                </div>
             </div>
-            {/* Info */}
-            <div className="flex flex-col justify-center">
-              <div className="text-xl font-semibold mb-1">Alice</div>
-              <div className="text-gray-700 mb-1">Event Coordinator</div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">WhatsApp:</span> <a href="https://wa.me/6281234567890" className="underline">+62 812-3456-7890</a>
-              </div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">Line ID:</span> alice.lineid
-              </div>
-            </div>
-          </div>
-          {/* Contact 2 */}
-          <div className="bg-[#F4C261] rounded-xl shadow p-6 flex items-center gap-4 w-full">
-            <div className="w-20 h-20 bg-[#001F54] rounded-full flex items-center justify-center text-3xl text-[#F4C261] font-bold">
-              B
-            </div>
-            <div className="flex flex-col justify-center">
-              <div className="text-xl font-semibold mb-1">Bob</div>
-              <div className="text-gray-700 mb-1">Technical Lead</div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">WhatsApp:</span> <a href="https://wa.me/6281398765432" className="underline">+62 813-9876-5432</a>
-              </div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">Line ID:</span> bob.lineid
-              </div>
-            </div>
-          </div>
-          {/* Contact 3 */}
-          <div className="bg-[#F4C261] rounded-xl shadow p-6 flex items-center gap-4 w-full">
-            <div className="w-20 h-20 bg-[#001F54] rounded-full flex items-center justify-center text-3xl text-[#F4C261] font-bold">
-              C
-            </div>
-            <div className="flex flex-col justify-center">
-              <div className="text-xl font-semibold mb-1">Cindy</div>
-              <div className="text-gray-700 mb-1">Public Relations</div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">WhatsApp:</span> <a href="https://wa.me/6281412345678" className="underline">+62 814-1234-5678</a>
-              </div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">Line ID:</span> cindy.lineid
-              </div>
-            </div>
-          </div>
-          {/* Contact 4 */}
-          <div className="bg-[#F4C261] rounded-xl shadow p-6 flex items-center gap-4 w-full">
-            <div className="w-20 h-20 bg-[#001F54] rounded-full flex items-center justify-center text-3xl text-[#F4C261] font-bold">
-              D
-            </div>
-            <div className="flex flex-col justify-center">
-              <div className="text-xl font-semibold mb-1">Dion</div>
-              <div className="text-gray-700 mb-1">Sponsorship</div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">WhatsApp:</span> <a href="https://wa.me/6281556781234" className="underline">+62 815-5678-1234</a>
-              </div>
-              <div className="text-gray-700 text-sm">
-                <span className="font-semibold">Line ID:</span> dion.lineid
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="mt-24">

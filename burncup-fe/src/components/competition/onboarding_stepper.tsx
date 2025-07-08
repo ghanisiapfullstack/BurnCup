@@ -116,7 +116,7 @@ export function OnboardingStepper(
                   </div>
                   {index < steps.length - 1 && (
                     <div
-                      className={`w-16 h-0.5 mx-4 ${completedSteps.includes(step.id) ? "bg-green-500" : "bg-gray-300"}`}
+                      className={`lg:w-16 w-5 h-0.5 mx-4 ${completedSteps.includes(step.id) ? "bg-green-500" : "bg-gray-300"}`}
                     />
                   )}
                 </div>

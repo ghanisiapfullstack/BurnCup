@@ -7,12 +7,12 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="w-screen h-[50vh]" style={{
+      <div className="w-screen min-h-[50vh]" style={{
         backgroundImage: 'url(/images/home_hero.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}>
-        <div className='h-full flex flex-row justify-center items-center bg-gradient-to-b from-black/60 to-black/30'>
+        <div className='min-h-[50vh] h-full flex flex-col lg:flex-row justify-center items-center bg-gradient-to-b from-black/60 to-black/30'>
           <Image
             src="/images/burncup_logo.png"
             alt="Burncup Logo"
@@ -20,18 +20,17 @@ export default function Home() {
             height={150}
             className='object-contain'
           />
-          <div className='flex flex-col items-center justify-center text-center space-y-2 w-1/3'>
+          <div className='flex flex-col items-center justify-center text-center space-y-2 w-2/3 lg:w-1/3 mb-10 lg:mb-0'>
             <p className='text-4xl font-bold text-text-primary'>Burncup 2025</p>
             <p className='text-2xl font-bold text-white'>COMPETE, EXPLORE, CONQUER</p>
             <p className='text-2xl font-font-semibold text-white'>The biggest internal competition event at Binus University Bekasi. Join us and showcase your talents!</p>
-            
           </div>
         </div>
       </div>
 
       {/* About Section */}
       <section className='mt-10 mb-20'>
-        <div className='flex flex-row items-center'>
+        <div className='flex flex-col lg:flex-row items-center'>
           <div className='p-10 flex flex-col justify-center items-start space-y-4'>
             <h2 className='text-3xl font-bold text-text-secondary'>WHAT IS BURNCUP?</h2>
             <p className='text-lg text-text-secondary'>

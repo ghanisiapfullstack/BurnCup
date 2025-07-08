@@ -15,7 +15,7 @@ export default function CompetitionRegisterButton({
             onClick={() => {
                 router.push(`/register/${competitionId}`);
             }}
-            className={`mt-4 px-6 py-2 bg-red text-white font-bold rounded-lg hover:opacity-90 transition-opacity ${className}`}
+            className={`mt-4 px-6 py-2 bg-text-primary text-[#720606] font-bold rounded-lg hover:opacity-60 transition-opacity ${className}`}
         >
             Register Now
         </button>

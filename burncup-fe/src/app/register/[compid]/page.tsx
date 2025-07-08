@@ -1,6 +1,5 @@
 "use server";
 
-import CompetitionRegisterButton from "@/components/competition/competition_register_button";
 import { OnboardingStepper } from "@/components/competition/onboarding_stepper";
 import { fetchCompetitionByID } from "@/controller/competition_controller";
 
@@ -19,6 +18,7 @@ export default async function CompetitionRegisterPage({
     try {
         competition = await fetchCompetitionByID(compid);
     } catch (err) {
+        console.error(err)
         return <div className="p-10">Competition not found</div>;
     }
 
@@ -29,11 +29,11 @@ export default async function CompetitionRegisterPage({
     return (
         <div>
             <div className="w-screen h-[50vh]" style={{
-                backgroundImage: 'url(/images/home_hero.png)',
+                backgroundImage: `url("${competition.imageUrl || '/images/placeholder.png'}")`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}>
-                <div className='pl-20 h-full flex flex-col justify-center items-start space-y-4 bg-gradient-to-r from-black/60 to-black/30'>
+                <div className='pl-20 h-full flex flex-col justify-center items-start space-y-4 bg-gradient-to-r from-black/80 to-black/30'>
                     <h1 className='text-4xl font-bold text-text-primary'>{competition.name}</h1>
                     <span className="inline-block bg-text-secondary text-text-primary text-base font-semibold px-3 py-1 rounded-full mb-3">
                         {competition.category}

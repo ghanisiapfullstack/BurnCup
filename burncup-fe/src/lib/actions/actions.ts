@@ -1,9 +1,8 @@
 "use server";
 
 import { auth, signIn, signOut} from "@/lib/core/auth";
-import { getToken } from "next-auth/jwt";
 
-export const login = async (provider: string) => {
+export const login = async () => {
     await signIn();
 };
 
@@ -17,7 +16,7 @@ export const loginWithProvider = async (provider: string, redirect?: string | nu
 }
 
 export const logout = async () => {
-    await signOut();
+    await signOut({redirectTo: "/"});
 };
 
 export const getCurrentSession = async () => {

@@ -1,5 +1,4 @@
 import NextAuth from "next-auth"
-import { decode, encode } from "next-auth/jwt";
 import { SignJWT, jwtVerify } from "jose";
 import Google from "next-auth/providers/google"
 
@@ -32,14 +31,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           prompt: "consent",
           access_type: "offline",
           response_type: "code",
+          scope: "openid email profile"
         },
       },
     })
     ],
   callbacks: {
-    async jwt({ token, account, user }) {
+    async jwt({ token, user, account}) {
       // When user logs in for the first time
-      if (account && user) {
+      if (account) {
         token.userId = user.id;
         token.provider = account.provider;
         token.accessToken = account.access_token;

@@ -2,10 +2,11 @@
 
 import type React from "react"
 
-import { Users, Plus, Search, Trophy } from "lucide-react"
+import { Plus, Search, Trophy } from "lucide-react"
 import { useState, useEffect } from "react"
 import { Competition } from "@/model/competition_model"
-import { CreateTeam } from "@/controller/team_controller"
+import { CreateTeam, JoinTeamByCode } from "@/controller/team_controller"
+import { useToast } from "@/components/common/toast/toast-context"
 
 interface TeamStepProps {
   onComplete: () => void
@@ -16,11 +17,12 @@ interface TeamStepProps {
 export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [isInitializing, setIsInitializing] = useState(true)
-  const [selectedTeam, setSelectedTeam] = useState<number | null>(null)
   const [isSingleTeam, setIsSingleTeam] = useState(false)
   const [activeTab, setActiveTab] = useState("join")
   const [teamName, setTeamName] = useState("")
   const [teamCode, setTeamCode] = useState("")
+
+  const {showError} = useToast();
 
   // Simulate loading teams data
   useEffect(() => {
@@ -29,9 +31,6 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
       if (competition.maxMembers == null) {
         setActiveTab("create")
       }
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
-      // Simulate fetching teams from API
 
       setIsInitializing(false)
     }
@@ -47,17 +46,17 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
       await CreateTeam(token.token, teamName, competition.id.toString())
       setIsLoading(false)
       onComplete()
-    } catch (error) {
-      console.error("Error creating team:", error)
+    } catch (error: any) {
+      if (error.response) {
+        const errorMessage = error.response.data.error;
+        showError("Failed to create team", errorMessage);
+      } else if (error.request) {
+        console.error("Failed to create team: No response received", error.request);
+      } else {
+        console.error("Failed to create team:", error.message);
+      }
     }
     setIsLoading(false)
-  }
-
-  const handleJoinTeam = async (teamId: number) => {
-    setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    setIsLoading(false)
-    onComplete()
   }
 
   const handleJoinWithCode = async (e: React.FormEvent) => {
@@ -65,9 +64,23 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
     if (!teamCode.trim()) return
 
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+
+    try {
+      const token = await (await fetch("/api/token")).json();
+      await JoinTeamByCode(token.token, teamCode, competition.id.toString())
+      setIsLoading(false)
+      onComplete()
+    } catch (error: any) {
+      if (error.response) {
+        const errorMessage = error.response.data.error;
+        showError("Failed to join team", errorMessage);
+      } else if (error.request) {
+        console.error("Failed to join team: No response received", error.request);
+      } else {
+        console.error("Failed to join team:", error.message);
+      }
+    }
     setIsLoading(false)
-    onComplete()
   }
 
   if (isCompleted) {
@@ -144,7 +157,7 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                 Join with Team Code
               </h4>
               <p className="text-gray-600 mb-4">Have a team code? Enter it below to join directly.</p>
-              <form onSubmit={handleJoinWithCode} className="flex gap-3">
+              <form onSubmit={handleJoinWithCode} className="flex gap-3 flex-wrap">
                 <input
                   type="text"
                   value={teamCode}
@@ -202,7 +215,7 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                     <input
                       id="compName"
                       value={competition.name}
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                       disabled
                       className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
@@ -217,7 +230,7 @@ export function TeamStep({ onComplete, isCompleted, competition }: TeamStepProps
                       type="number"
                       value={competition.maxMembers ? competition.maxMembers : 1}
                       disabled={true}
-                      onChange={(e) => {}}
+                      onChange={() => {}}
                       className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                     <p className="text-sm text-gray-500">

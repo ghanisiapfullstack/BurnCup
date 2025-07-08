@@ -46,3 +46,25 @@ export async function CreateTeam(token: string, teamName: string, compId: string
     throw err;
   }
 }
+
+export async function JoinTeamByCode(token: string, teamCode: string, compId: string): Promise<User> {
+  try {
+    const res = await axiosInstance.post(
+      "join-team",
+      {
+        TeamCode: teamCode,
+          competitionId: compId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error updating user:", err);
+    throw err;
+  }
+}

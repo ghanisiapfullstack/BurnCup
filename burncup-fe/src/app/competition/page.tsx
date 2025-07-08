@@ -1,10 +1,9 @@
 "use client";
 
-import Header from "@/components/common/header";
 import CategoryBadgeButton from "@/components/competition/category_badge_button";
 import CompetitionCard from "@/components/competition/competition_card";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import type { Competition } from "@/model/competition_model";
 import { fetchCompetitions } from "@/controller/competition_controller";
 
@@ -12,16 +11,17 @@ const categories = [
   "All Categories",
   "Sports",
   "E-Sports",
-  "Arts",
-  "Performance",
+  "Creative",
+  "Automotive",
 ];
 
-export default function CompetitionPage() {
+function CompetitionPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const selectedCategory = searchParams.get("category");
+  const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get("category") || "All Categories");
 
   const [competitions, setCompetitions] = useState<Competition[]>([]);
+  const [sortedCompetitions, setSortedCompetitions] = useState<Competition[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,10 +32,23 @@ export default function CompetitionPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    if (competitions.length === 0) return;
+    console.log("Selected category changed:", selectedCategory);
+    if (selectedCategory === "All Categories") {
+      setSortedCompetitions(competitions);
+    } else {
+      const filteredCompetitions = competitions.filter(
+        (competition) => competition.category === selectedCategory
+      );
+      setSortedCompetitions(filteredCompetitions);
+    }
+  }, [selectedCategory, competitions])
+
   return (
     <div>
-      <h1 className="text-3xl font-bold text-center mt-10">Competition</h1>
-      <div className="flex flex-row justify-center items-center mt-10 space-x-4">
+      <h1 className="text-3xl font-bold text-center mt-10 mb-10">Competition</h1>
+      <div className="flex flex-wrap justify-center items-center space-x-4 space-y-2">
         {categories.map((category) => (
           <CategoryBadgeButton
             key={category}
@@ -49,8 +62,10 @@ export default function CompetitionPage() {
               const params = new URLSearchParams(searchParams);
               if (category === "All Categories") {
                 params.delete("category");
+                setSelectedCategory("All Categories");
               } else {
                 params.set("category", category);
+                setSelectedCategory(category);
               }
               router.replace(`?${params.toString()}`);
             }}
@@ -62,8 +77,8 @@ export default function CompetitionPage() {
         {loading ? (
           <div className="text-center py-20 text-lg text-gray-500">Loading competitions...</div>
         ) : (
-          <div className="p-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {competitions.map((competition) => (
+          <div className="p-[5%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sortedCompetitions.map((competition) => (
               <CompetitionCard
                 key={competition.id}
                 competition={competition}
@@ -77,4 +92,12 @@ export default function CompetitionPage() {
       </div>
     </div>
   );
+}
+
+export default function CompetitionPageWithSuspense() {
+  return (
+    <Suspense>
+      <CompetitionPage />
+    </Suspense>
+  )
 }

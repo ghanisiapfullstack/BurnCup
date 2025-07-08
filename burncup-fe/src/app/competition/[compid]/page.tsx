@@ -18,6 +18,7 @@ export default async function CompetitionDetailPage({
     try {
         competition = await fetchCompetitionByID(compid);
     } catch (err) {
+        console.error(err)
         return <div className="p-10">Competition not found</div>;
     }
 
@@ -27,12 +28,12 @@ export default async function CompetitionDetailPage({
 
     return (
         <div>
-            <div className="w-screen h-[50vh]" style={{
-                backgroundImage: 'url(/images/home_hero.png)',
+            <div className="w-screen h-[50vh] bg-checkered" style={{
+                backgroundImage: `url("${competition.imageUrl}")`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
             }}>
-                <div className='pl-20 h-full flex flex-col justify-center items-start space-y-4 bg-gradient-to-r from-black/60 to-black/30'>
+                <div className='pl-20 h-full flex flex-col justify-center items-start space-y-4 bg-gradient-to-r from-black/80 to-black/30'>
                     <h1 className='text-4xl font-bold text-text-primary'>{competition.name}</h1>
                     <span className="inline-block bg-text-secondary text-text-primary text-base font-semibold px-3 py-1 rounded-full mb-3">
                         {competition.category}
@@ -40,8 +41,8 @@ export default async function CompetitionDetailPage({
                 </div>
             </div>
 
-            <div className="p-10 flex flex-row justify-center space-x-10">
-                <div className="flex flex-col w-1/2">
+            <div className="p-10 flex flex-wrap justify-center space-x-10 space-y-10">
+                <div className="flex flex-col lg:w-1/2">
                     <h2 className="text-2xl font-bold text-text-secondary mb-4">About the Competition</h2>
                     <p className="text-lg text-text-secondary mb-6">{competition.description}</p>
                     
@@ -58,9 +59,9 @@ export default async function CompetitionDetailPage({
                             <li key={idx} className="text-text-secondary">{req}</li>
                         ))}
                     </ul>
-                    <div className="bg-text-primary p-8 rounded-lg shadow-md">
-                        <h3 className="text-2xl font-semibold text-text-secondary mb-3">Ready to Compete?</h3>
-                        <h3 className="text-xl font-semibold text-text-secondary mb-3">Register now to secure your spot in the {competition.name} competition at BurnCup 2025!</h3>
+                    <div className="bg-[#720606] p-8 rounded-lg shadow-md">
+                        <h3 className="text-2xl font-semibold text-white mb-3">Ready to Compete?</h3>
+                        <h3 className="text-xl font-semibold text-white mb-3">Register now to secure your spot in the {competition.name} competition at BurnCup 2025!</h3>
                         <CompetitionRegisterButton competitionId={competition.id} />
                     </div>
                 </div>

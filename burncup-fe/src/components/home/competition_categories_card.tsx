@@ -62,7 +62,7 @@ export default function CompetitionCategoriesCard() {
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-blue-900 mb-8">Competition Categories</h1>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 mx-10">
             {categories.map((category, index) => (
               <div key={index} className="bg-[#E6B85C] rounded-lg shadow-lg p-8 text-center">
                 <div className="flex justify-center mb-4">{category.icon}</div>

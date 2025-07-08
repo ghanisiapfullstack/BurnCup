@@ -4,7 +4,6 @@ import type React from "react"
 
 import { Chrome, Github, Mail, Facebook } from "lucide-react"
 import { useState, useEffect } from "react"
-import { log } from "console"
 import { getCurrentSession, loginWithProvider } from "@/lib/actions/actions"
 
 interface AuthStepProps {

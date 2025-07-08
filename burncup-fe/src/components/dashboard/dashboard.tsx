@@ -26,10 +26,13 @@ import {
 
 import { User as UserModel } from "@/model/user_model"
 import { Team } from "@/model/team_model"
-import { fetchCurrentUser } from "@/controller/user_controller"
-import { getCurrentSession } from "@/lib/actions/actions"
+import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
+import { getCurrentSession, logout } from "@/lib/actions/actions"
 import { fetchCurrentTeams } from "@/controller/team_controller"
 import { Session } from "next-auth"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useToast } from "../common/toast/toast-context"
 
 interface TimeLeft {
   days: number
@@ -182,11 +185,13 @@ function TeamMemberCard({ member, isLeader = false }: { member: UserModel; isLea
 
 function EditProfileModal({
   user,
+  userEmail,
   isOpen,
   onClose,
   onSave,
 }: {
   user: UserModel
+  userEmail: string
   isOpen: boolean
   onClose: () => void
   onSave: (userData: UserModel) => void
@@ -203,14 +208,23 @@ function EditProfileModal({
     setIsLoading(true)
 
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const token = await (await fetch("/api/token")).json();
+      formData.email = userEmail; // Ensure email is set from props
+      await updateCurrentUser(token.token, formData);
+      setIsLoading(false)
+      onSave(formData)
+      onClose()
+    } catch (error) {
+      console.error("Failed to update user profile:", error)
+    }
 
     onSave(formData)
     setIsLoading(false)
     onClose()
   }
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
@@ -231,8 +245,9 @@ function EditProfileModal({
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-900">User Type</label>
             <select
-              value={user.binusian ? "binusian" : "non-binusian"}
-              onChange={(e) => {}}
+              value={formData.binusian ? "binusian" : "non-binusian"}
+              onChange={(e) => handleInputChange("binusian", e.target.value == "binusian")}
+              disabled = {user != emptyUser}
               className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50 text-sm md:text-base"
             >
               <option value="binusian">Binusian</option>
@@ -264,7 +279,7 @@ function EditProfileModal({
                 id="phone"
                 type="tel"
                 value={formData.phoneNumber}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
+                onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                 placeholder="Enter your phone number"
                 required
                 className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
@@ -329,7 +344,7 @@ function EditProfileModal({
             </button>
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || formData == user}
               className="w-full sm:w-auto px-4 md:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm md:text-base"
             >
               <Save className="w-4 h-4" />
@@ -342,6 +357,16 @@ function EditProfileModal({
   )
 }
 
+export const emptyUser: UserModel = {
+  fullName: "-",
+  email: "-",
+  phoneNumber: "-",
+  binusian: false,
+  nim: "-",
+  major: "-",
+  school: "-",
+};
+
 export function Dashboard() {
   const [competitions, setCompetitions] = useState<Team[] | null>(null)
   const [user, setUser] = useState<UserModel | null>(null)
@@ -349,6 +374,11 @@ export function Dashboard() {
   const [expandedCompetitions, setExpandedCompetitions] = useState<Set<string>>(new Set())
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const [session, setSession] = useState<Session | null>(null)
+
+  const router = useRouter()
+  const {showError} = useToast();
+
+  
 
   useEffect(() => {
     // Simulate loading dashboard data
@@ -358,20 +388,44 @@ export function Dashboard() {
       if (session) {
         const token = await (await fetch("/api/token")).json();
         // Load user profile data
+
         try {
           const userProfile = await fetchCurrentUser(token.token);
           setUser(userProfile);
 
-          const comps = await fetchCurrentTeams(token.token) as Team[];
+        } catch (error: any) {
+          if (error.response) {
+            const errorMessage = error.response.data.error;
+            if (errorMessage == "User not found") {
+              setUser(emptyUser);
+            } else {
+              showError("Failed to fetch user profile", errorMessage);
+            }
+          } else if (error.request) {
+            console.error("Failed to fetch user profile: No response received", error.request);
+          } else {
+            console.error("Failed to fetch user profile:", error.message);
+          }
+        }
+
+        try {
+          const comps = (await fetchCurrentTeams(token.token) as Team[]) ?? [];
           comps.forEach((competition) => {
             if (competition.members == null) {
               competition.members = [];
             }
           });
-          setCompetitions(comps);
+          setCompetitions(comps ?? []);
           setIsLoading(false);
-        } catch (error) {
-          console.log("Failed to fetch user profile:", error)
+        } catch (error: any) {
+          if (error.response) {
+            const errorMessage = error.response.data.error;
+            showError("Failed to fetch competition", errorMessage);
+          } else if (error.request) {
+            console.error("Failed to fetch competition: No response received", error.request);
+          } else {
+            console.error("Failed to fetch competition:", error.message);
+          }
         }
     }
   }
@@ -397,21 +451,16 @@ export function Dashboard() {
   }
 
   const handleLogout = () => {
-    // Simulate logout
-    if (confirm("Are you sure you want to logout?")) {
-      alert("Logged out successfully!")
-      // In real app, redirect to login page
-    }
+    logout()
   }
 
   const handleSaveProfile = (userData: UserModel) => {
     setUser(userData)
-    alert("Profile updated successfully!")
   }
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h3 className="text-lg font-semibold text-gray-700 mb-2">Loading Dashboard...</h3>
@@ -422,7 +471,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-amber-100">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 py-6 md:py-8 px-4">
         <div className="container mx-auto">
@@ -430,7 +479,7 @@ export function Dashboard() {
             <div>
               <h1 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Sports Dashboard</h1>
               <p className="text-sm md:text-base text-blue-800">
-                Welcome back, <span className="font-semibold">{user?.fullName}</span>!
+                Welcome back, <span className="font-semibold">{session?.user?.name}</span>!
               </p>
               <p className="text-sm md:text-base text-blue-800 hidden md:block">
                 Here are your registered competitions across different sports.
@@ -439,7 +488,7 @@ export function Dashboard() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
               <div className="text-left sm:text-right">
                 <div className="inline-block bg-blue-900 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold">
-                  Multi-Sport Athlete
+                  Burncup 2025 Participant
                 </div>
               </div>
               <button
@@ -461,7 +510,13 @@ export function Dashboard() {
           <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <User className="w-8 h-8 text-blue-600" />
+                <Image
+                  src={session?.user?.image || "/default-profile.png"}
+                  alt="Profile Picture"
+                  width={64}
+                  height={64}
+                  className="w-16 h-16 rounded-full object-cover"
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-bold text-gray-900 truncate">{user?.fullName}</h3>
@@ -493,7 +548,13 @@ export function Dashboard() {
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sticky top-8">
               <div className="text-center mb-6">
                 <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="w-10 h-10 text-blue-600" />
+                  <Image
+                  src={session?.user?.image || "/default-profile.png"}
+                  alt="Profile Picture"
+                  width={64}
+                  height={64}
+                  className="w-20 h-20 rounded-full object-cover"
+                />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1">{user?.fullName}</h3>
                 <p className="text-sm text-gray-600 mb-2">{session?.user?.email}</p>
@@ -541,7 +602,7 @@ export function Dashboard() {
                 className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Edit className="w-4 h-4" />
-                <span>Edit Profile</span>
+                <span>{user == emptyUser ? 'Complete Profile' : 'Edit Profile'}</span>
               </button>
             </div>
           </div>
@@ -555,7 +616,9 @@ export function Dashboard() {
                 <p className="text-sm md:text-base text-gray-500 mb-6">
                   You haven't registered for any competitions yet.
                 </p>
-                <button className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm md:text-base">
+                <button 
+                onClick={() => router.push("/competition")}
+                className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm md:text-base">
                   Browse Competitions
                 </button>
               </div>
@@ -776,6 +839,7 @@ export function Dashboard() {
       {/* Edit Profile Modal */}
       <EditProfileModal
         user={user!}
+        userEmail={session?.user?.email || ""}
         isOpen={isEditProfileOpen}
         onClose={() => setIsEditProfileOpen(false)}
         onSave={handleSaveProfile}

@@ -1,4 +1,5 @@
 import { Competition } from '@/model/competition_model';
+import Image from 'next/image';
 
 export default function CompetitionCard({
     competition,
@@ -10,12 +11,23 @@ export default function CompetitionCard({
     return (
         <div className="rounded-xl overflow-hidden shadow-md bg-accent flex flex-col">
             {/* Image or placeholder */}
-            <div className="h-32 w-full bg-[url('/images/placeholder.png')] bg-checkerboard bg-cover bg-center" />
+            <Image
+                src={competition.imageUrl || '/images/placeholder.png'}
+                alt={competition.name}
+                width={500}
+                height={200}
+                className="h-32 w-full object-cover bg-checkerboard"
+                />
             <div className="p-5 flex-initial flex-col">
                 <h3 className="text-xl font-bold text-secondary mb-2">{competition.name}</h3>
-                <span className="inline-block bg-text-secondary text-text-primary text-xs font-semibold px-3 py-1 rounded-full mb-3">
-                    {competition.category}
-                </span>
+                <div className='flex flex-wrap space-x-2'>
+                    <span className="inline-block bg-text-secondary text-text-primary text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                        {competition.category}
+                    </span>
+                    <span className="inline-block bg-text-secondary text-text-primary text-xs font-semibold px-3 py-1 rounded-full mb-3">
+                        {competition.competitionType}
+                    </span>
+                </div>
                 <p className="text-secondary mb-3">{competition.description}</p>
                 <ul className="mb-4 space-y-1 text-[15px]">
                     {competition.requirements.map((requirement, idx) => (

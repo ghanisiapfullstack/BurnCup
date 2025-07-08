@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   backend:
-    build: ./burncup-be
+    build:
+      context: ./burncup-be
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     restart: unless-stopped
@@ -10,7 +12,9 @@ services:
       - postgres
 
   frontend:
-    build: ./burncup-fe
+    build:
+      context: ./burncup-fe
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     restart: unless-stopped

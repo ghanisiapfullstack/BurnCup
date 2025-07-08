@@ -6,6 +6,7 @@ import { CheckCircle, Lock, User } from "lucide-react"
 import { useState, useEffect } from "react"
 import { getCurrentSession } from "@/lib/actions/actions"
 import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
+import { useToast } from "@/components/common/toast/toast-context"
 
 interface ProfileStepProps {
   onComplete: () => void
@@ -27,6 +28,8 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
     email: "",
     phone: "",
   })
+
+  const {showError} = useToast();
 
   // Simulate loading profile data
   useEffect(() => {
@@ -50,8 +53,17 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
             email: session.user!.email || "",
             phone: userProfile.phoneNumber || "",
           })
-        } catch (error) {
-          console.log("Failed to fetch user profile:", error)
+        } catch (error: any) {
+          if (error.response) {
+            const errorMessage = error.response.data.error;
+            if (errorMessage != "User not found") {
+              showError("Failed to fetch user", errorMessage);
+            }
+          } else if (error.request) {
+            console.error("Failed to fetch user: No response received", error.request);
+          } else {
+            console.error("Failed to fetch user:", error.message);
+          }
         }
       }
 
@@ -94,16 +106,6 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const isFormValid = () => {
-    const baseFields = formData.fullName && formData.email && formData.phone
-
-    if (formData.userType === "binusian") {
-      return baseFields && formData.nim && formData.major
-    } else {
-      return baseFields && formData.school
-    }
   }
 
   if (isCompleted) {
