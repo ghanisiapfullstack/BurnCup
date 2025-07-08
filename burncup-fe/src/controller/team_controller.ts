@@ -2,7 +2,7 @@ import { Team } from "@/model/team_model";
 import type { User } from "@/model/user_model";
 import axios from "axios";
 
-const baseURL = "http://host.docker.internal:8000/api/protected";
+const baseURL = "https://host.docker.internal:8000/api/protected";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
