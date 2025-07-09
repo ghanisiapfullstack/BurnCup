@@ -22,6 +22,8 @@ export function Header() {
 
       const sessionUser = await getCurrentSession();
 
+      console.log("secret: ", process.env.AUTH_SECRET)
+
       setUser(sessionUser)
       setIsLoading(false)
     }
