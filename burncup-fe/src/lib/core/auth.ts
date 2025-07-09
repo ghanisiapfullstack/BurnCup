@@ -37,7 +37,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
     ],
   callbacks: {
-    async jwt({ token, user, account}) {
+    async jwt({ token, account, user}) {
       // When user logs in for the first time
       if (account) {
         token.userId = user.id;
