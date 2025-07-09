@@ -43,8 +43,11 @@ jobs:
             echo 'Cloning the files..'
             git clone git@github.com:NotchG/BurnCup.git
 
+            cd BurnCup
+
             echo 'Copying frontend env files..'
-            cd BurnCup/burncup-fe
+            echo "${{secrets.FRONTEND_ENV}}" >> .env.local
+            cd burncup-fe
             echo "${{secrets.FRONTEND_ENV}}" >> .env.local
             
             cd ../
