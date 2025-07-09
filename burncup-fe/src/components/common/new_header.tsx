@@ -24,8 +24,6 @@ export function Header() {
 
       const token = await (await fetch("/api/token")).json();
 
-      console.log("token", token);
-
       setUser(sessionUser)
       setIsLoading(false)
     }
