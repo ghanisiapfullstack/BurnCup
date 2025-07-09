@@ -38,6 +38,7 @@ jobs:
             cd ..
             
             echo 'Cleaning up old files..'
+            echo "${{secrets.SSH_PASSWORD}}" | sudo -S docker image prune -f
             echo "${{secrets.SSH_PASSWORD}}" | sudo -S rm -rf BurnCup
             
             echo 'Cloning the files..'
@@ -57,8 +58,8 @@ jobs:
             cd ../
             
             echo 'Starting docker engine'
-
-            echo "${{secrets.SSH_PASSWORD}}" | sudo -S docker compose up -d --build
+            
+            echo "${{secrets.SSH_PASSWORD}}" | sudo -S docker compose up -d --build --force-recreate
             
             echo 'Engine started and website deployed'
             exit
