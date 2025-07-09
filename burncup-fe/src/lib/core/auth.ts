@@ -37,6 +37,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     })
     ],
   callbacks: {
+    async redirect({url}) {
+      return url.url;
+    },
     async jwt({ token, account, user}) {
       // When user logs in for the first time
       if (account) {
