@@ -46,9 +46,13 @@ jobs:
             cd BurnCup
 
             echo 'Copying frontend env files..'
-            echo "${{secrets.FRONTEND_ENV}}" >> .env.local
+            cat <<EOF > .env.local
+            ${{ secrets.FRONTEND_ENV }}
+            EOF
             cd burncup-fe
-            echo "${{secrets.FRONTEND_ENV}}" >> .env.local
+            cat <<EOF > .env.local
+            ${{ secrets.FRONTEND_ENV }}
+            EOF
             
             cd ../
             
