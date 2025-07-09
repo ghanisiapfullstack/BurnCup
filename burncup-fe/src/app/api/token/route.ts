@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const token = await getToken({ req, secret, raw: true, cookieName: "__Secure-next-auth.session-token" });
 
   if (!token) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ message: `Unauthorized with token ${token} and secret ${secret}` }, { status: 401 });
   }
 
   return NextResponse.json({ token });
