@@ -22,8 +22,6 @@ export function Header() {
 
       const sessionUser = await getCurrentSession();
 
-      const token = await (await fetch("/api/token")).json();
-
       setUser(sessionUser)
       setIsLoading(false)
     }
