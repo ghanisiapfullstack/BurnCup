@@ -1,7 +1,7 @@
 import type { Competition } from "@/model/competition_model";
 import axios from "axios";
 
-const baseURL = "https://host.docker.internal:8000/api";
+const baseURL = "https://apiburncuptesting.notchgnas.com/api";
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
