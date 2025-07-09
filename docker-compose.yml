@@ -21,7 +21,7 @@ services:
     environment:
       - NODE_ENV=production
     env_file:
-      - ./burncup-fe/.env.local
+      - .env.local
 
   postgres:
     image: postgres:16
