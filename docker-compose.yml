@@ -20,8 +20,11 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-    env_file:
-      - ./burncup-fe/.env.local
+      - AUTH_SECRET: x+moMx7qVg46NDBVCsxguFtF+Oja6uy7NdFNOlV+Z7M=
+      - AUTH_URL: https://burncuptesting.notchgnas.com
+      - AUTH_GOOGLE_ID: 341997010337-30n42jk0qfafti3pdctciph6ftedjc4b.apps.googleusercontent.com
+      - AUTH_GOOGLE_SECRET: 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
+      - AUTH_TRUST_HOST: true
 
   postgres:
     image: postgres:16
