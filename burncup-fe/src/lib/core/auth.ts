@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import { SignJWT, jwtVerify } from "jose";
 import Google from "next-auth/providers/google"
 
-const secret = new TextEncoder().encode(process.env.AUTH_SECRET ?? "x+moMx7qVg46NDBVCsxguFtF+Oja6uy7NdFNOlV+Z7M=");
+const secret = new TextEncoder().encode(process.env.AUTH_SECRET);
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -23,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return payload;
     },
   },
-  secret: process.env.AUTH_SECRET ?? "x+moMx7qVg46NDBVCsxguFtF+Oja6uy7NdFNOlV+Z7M=",
+  secret: process.env.AUTH_SECRET,
   providers: [
     Google({
       authorization: {
