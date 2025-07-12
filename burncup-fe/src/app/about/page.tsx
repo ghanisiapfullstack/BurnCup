@@ -1,6 +1,6 @@
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F2EDDA]">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#001F54] via-[#003875] to-[#001F54] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-10"></div>
@@ -15,11 +15,11 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F2EDDA] to-transparent"></div>
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 relative">
+      <section className="py-20 relative bg-[#F2EDDA]">
         <div className="container mx-auto px-4">
           {/* Timeline Line */}
           <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-[#F4C261] to-[#001F54] h-full hidden lg:block"></div>
@@ -168,11 +168,11 @@ export default function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-24 bg-[#F2EDDA]">
         <div className="container mx-auto px-4">
           <div className="bg-gradient-to-r from-[#001F54] via-[#003875] to-[#001F54] rounded-3xl overflow-hidden shadow-2xl">
             <div className="flex flex-col lg:flex-row">
-              <div className="flex-1 p-12 lg:p-16">
+              <div className="flex-1 p-12 lg:p-16 flex flex-col justify-center items-center text-center lg:text-left lg:items-start">
                 <h2 className="text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
                   Ready to Join<br />
                   <span className="bg-gradient-to-r from-[#F4C261] to-[#FFD700] bg-clip-text text-transparent">

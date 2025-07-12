@@ -1,7 +1,7 @@
 import type { Competition } from "@/model/competition_model";
 import axios from "axios";
 
-const baseURL = "http://host.docker.internal:8000/api";
+const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,

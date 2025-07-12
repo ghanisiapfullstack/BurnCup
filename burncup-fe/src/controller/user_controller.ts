@@ -1,7 +1,7 @@
 import type { User } from "@/model/user_model";
 import axios from "axios";
 
-const baseURL = "https://apiburncuptesting.notchgnas.com/api/protected";
+const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/protected`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
