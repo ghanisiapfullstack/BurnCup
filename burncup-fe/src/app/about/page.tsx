@@ -1,186 +1,212 @@
 export default function AboutPage() {
   return (
-    <div>
-      <main className="p-10">
-        <h1 className="text-4xl font-bold mb-4 text-center">The Burncup Journey</h1>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-[#001F54] via-[#003875] to-[#001F54] text-white py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-10"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-8 bg-gradient-to-r from-[#F4C261] to-[#FFD700] bg-clip-text text-transparent">
+              The BurnCup Journey
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+              From humble beginnings to Indonesia's premier inter-faculty competition -
+              discover the evolution of excellence through the years
+            </p>
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
+      </section>
 
-        {/* Section 1: Desc left, Image right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-10 px-4">
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2025</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-</div>
+      {/* Timeline Section */}
+      <section className="py-20 relative">
+        <div className="container mx-auto px-4">
+          {/* Timeline Line */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-[#F4C261] to-[#001F54] h-full hidden lg:block"></div>
 
-{/* Section 2: Image left, Desc right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit order-2 lg:order-1">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-2">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2024</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-</div>
+          <div className="space-y-24">
+            {/* 2025 Section */}
+            <div className="relative">
+              <div className="flex flex-col lg:flex-row items-center gap-12">
+                {/* Timeline Dot */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#F4C261] rounded-full border-4 border-white shadow-lg z-10 hidden lg:block"></div>
 
-{/* Section 3: Desc left, Image right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2023</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-</div>
+                {/* Content Left */}
+                <div className="flex-1 lg:pr-16 lg:text-right">
+                  <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100 hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div className="inline-block bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] px-8 py-4 rounded-full font-black text-3xl mb-8 shadow-lg">
+                      2025
+                    </div>
+                    <h2 className="text-5xl font-black text-[#001F54] mb-6 leading-tight">
+                      The Grand Evolution
+                    </h2>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      BurnCup 2025 marks our most ambitious chapter yet, featuring 17 diverse competition categories
+                      and expecting over 800 participants. This year brings enhanced production values, prestigious
+                      venues, and bigger prizes than ever before.
+                    </p>
+                    <div className="flex flex-wrap gap-4 justify-center lg:justify-end">
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">17 Categories</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">800+ Participants</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Bigger Prizes</span>
+                    </div>
+                  </div>
+                </div>
 
-{/* Section 4: Image left, Desc right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit order-2 lg:order-1">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-2">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2022</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-</div>
+                {/* Image Right */}
+                <div className="flex-1 lg:pl-16">
+                  <div className="bg-gradient-to-br from-[#F4C261] to-[#FFD700] rounded-3xl p-2 shadow-2xl">
+                    <img src="/images/home_hero.png" alt="BurnCup 2025" className="w-full h-80 object-cover rounded-2xl shadow-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-{/* Section 5: Desc left, Image right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2021</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-</div>
+            {/* 2024 Section - Reversed */}
+            <div className="relative">
+              <div className="flex flex-col lg:flex-row-reverse items-center gap-12">
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#F4C261] rounded-full border-4 border-white shadow-lg z-10 hidden lg:block"></div>
 
-{/* Section 6: Image left, Desc right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit order-2 lg:order-1">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-2">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2020</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-</div>
+                <div className="flex-1 lg:pl-16">
+                  <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100 hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div className="inline-block bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] px-8 py-4 rounded-full font-black text-3xl mb-8 shadow-lg">
+                      2024
+                    </div>
+                    <h2 className="text-5xl font-black text-[#001F54] mb-6 leading-tight">
+                      Digital Innovation
+                    </h2>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      The year we embraced digital transformation, introducing online competitions
+                      and hybrid events. BurnCup 2024 showcased our adaptability and commitment
+                      to innovation in challenging times.
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Hybrid Events</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Digital Platform</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Innovation</span>
+                    </div>
+                  </div>
+                </div>
 
-{/* Section 7: Desc left, Image right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2019</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-</div>
+                <div className="flex-1 lg:pr-16">
+                  <div className="bg-gradient-to-br from-[#001F54] to-[#003875] rounded-3xl p-2 shadow-2xl">
+                    <img src="/images/home_hero.png" alt="BurnCup 2024" className="w-full h-80 object-cover rounded-2xl shadow-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-{/* Section 8: Image left, Desc right */}
-<div className="flex flex-col lg:flex-row justify-center items-center lg:items-start gap-8 lg:gap-20 mt-16 px-4">
-  <div className="grid grid-cols-2 gap-4 lg:gap-6 w-fit order-2 lg:order-1">
-    <img src="/images/home_hero.png" alt="Image 1" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 2" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 3" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-    <img src="/images/home_hero.png" alt="Image 4" className="w-48 h-36 md:w-60 md:h-48 object-cover rounded-lg" />
-  </div>
-  <div className="flex-1 max-w-md flex flex-col items-center lg:items-start text-center lg:text-left order-1 lg:order-2">
-    <h1 className="text-[32px] bg-[#001F54] text-[#F4C261] px-4 py-2 rounded-xl w-fit mb-2 font-bold">2018</h1>
-    <h1 className="font-bold text-[32px] mb-2">Judul</h1>
-    <p className="text-[26px] md:text-[24px] lg:text-[26px]">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ultrices justo ligula,
-      et rhoncus sapien luctus a. Sed scelerisque consectetur nisl ut tristique. Donec eu libero 
-      cursus, lobortis metus vitae, cursus arcu. 
-    </p>
-  </div>
-</div>
+            {/* 2023 Section */}
+            <div className="relative">
+              <div className="flex flex-col lg:flex-row items-center gap-12">
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#F4C261] rounded-full border-4 border-white shadow-lg z-10 hidden lg:block"></div>
 
-  <div className="bg-gradient-to-b from-[#F4C261] to-[#8E7138] flex flex-row gap-4 md:gap-8 lg:gap-15 mt-8 lg:mt-15 w-full rounded-3xl p-4 lg:p-0">
-    <div className="flex-[2] flex flex-col justify-center p-6 lg:p-10">
-        <h1 className="text-[20px] md:text-[28px] lg:text-[32px] font-bold leading-tight">
-            BurnCup 2025 <br/> Compete, Explore, Conquer
-        </h1>
-        <p className="text-[14px] md:text-[14px] lg:text-[26px] font-semibold mt-3 lg:mt-15 leading-relaxed">
-            This year, we're taking BurnCup to unprecedented heights with our most ambitious 
-            edition yet. Featuring 17 diverse competition categories, we're expecting over 800 
-            participants from across all departments. With enhanced production values, prestigious 
-            venues, and bigger prizes, BurnCup 2025 promises to be an unforgettable experience for all involved.
-        </p>
-        <button className="mt-3 lg:mt-6 px-4 lg:px-8 py-2 lg:py-3 bg-[#720606] text-[#F4C261] font-bold rounded-xl shadow hover:bg-[#16396b] transition-colors text-xs md:text-sm lg:text-base">
-            REGISTER FOR BURNCUP 2025
-        </button>
-    </div>
-    <div className="flex-1 flex items-center justify-center p-2 md:p-6 lg:p-10">
-        <img 
-            src="/images/burncup_mascot.png" 
-            alt="BurnCup 2025 Mascot" 
-            className="w-full max-w-[150px] md:max-w-[300px] lg:max-w-[436px] h-auto object-contain"
-        />
-    </div>
-</div>
-        
-      </main>
+                <div className="flex-1 lg:pr-16 lg:text-right">
+                  <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100 hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div className="inline-block bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] px-8 py-4 rounded-full font-black text-3xl mb-8 shadow-lg">
+                      2023
+                    </div>
+                    <h2 className="text-5xl font-black text-[#001F54] mb-6 leading-tight">
+                      Expanding Horizons
+                    </h2>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      A milestone year that saw BurnCup expand beyond traditional competitions.
+                      We introduced new categories and welcomed participants from various backgrounds,
+                      truly embodying our spirit of inclusivity.
+                    </p>
+                    <div className="flex flex-wrap gap-4 justify-center lg:justify-end">
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">New Categories</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Inclusivity</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Growth</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-1 lg:pl-16">
+                  <div className="bg-gradient-to-br from-[#F4C261] to-[#FFD700] rounded-3xl p-2 shadow-2xl">
+                    <img src="/images/home_hero.png" alt="BurnCup 2023" className="w-full h-80 object-cover rounded-2xl shadow-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2022 Section - Reversed */}
+            <div className="relative">
+              <div className="flex flex-col lg:flex-row-reverse items-center gap-12">
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 bg-[#F4C261] rounded-full border-4 border-white shadow-lg z-10 hidden lg:block"></div>
+
+                <div className="flex-1 lg:pl-16">
+                  <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 border border-gray-100 hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div className="inline-block bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] px-8 py-4 rounded-full font-black text-3xl mb-8 shadow-lg">
+                      2022
+                    </div>
+                    <h2 className="text-5xl font-black text-[#001F54] mb-6 leading-tight">
+                      Building Foundations
+                    </h2>
+                    <p className="text-xl text-gray-700 leading-relaxed mb-8">
+                      The year we established our core values and competition framework.
+                      BurnCup 2022 laid the groundwork for what would become Indonesia's
+                      most celebrated inter-faculty competition series.
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Core Values</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Framework</span>
+                      <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">Foundation</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-1 lg:pr-16">
+                  <div className="bg-gradient-to-br from-[#001F54] to-[#003875] rounded-3xl p-2 shadow-2xl">
+                    <img src="/images/home_hero.png" alt="BurnCup 2022" className="w-full h-80 object-cover rounded-2xl shadow-lg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 bg-gradient-to-br from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="bg-gradient-to-r from-[#001F54] via-[#003875] to-[#001F54] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="flex flex-col lg:flex-row">
+              <div className="flex-1 p-12 lg:p-16">
+                <h2 className="text-5xl lg:text-6xl font-black text-white mb-8 leading-tight">
+                  Ready to Join<br />
+                  <span className="bg-gradient-to-r from-[#F4C261] to-[#FFD700] bg-clip-text text-transparent">
+                    BurnCup 2025?
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-200 mb-12 leading-relaxed">
+                  Be part of the biggest inter-faculty competition in Indonesia.
+                  Register now and showcase your talents on the grandest stage
+                  with over 800 participants across 17 exciting categories.
+                </p>
+                <button className="group bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] px-12 py-6 rounded-full font-black text-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
+                  <span className="flex items-center gap-3">
+                    REGISTER NOW
+                    <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+              <div className="flex-1 flex items-center justify-center p-8 lg:p-16">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#F4C261] to-[#FFD700] rounded-full blur-3xl opacity-30 animate-pulse"></div>
+                  <img
+                    src="/images/burncup_mascot.png"
+                    alt="BurnCup 2025 Mascot"
+                    className="relative w-full max-w-md h-auto object-contain transform hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
