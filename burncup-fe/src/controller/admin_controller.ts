@@ -73,6 +73,7 @@ export async function addCompetition(token: string, competition: Competition): P
         rules: competition.rules ?? [],
         maxMembers: competition.maxMembers ?? null,
         minMembers: competition.minMembers ?? null,
+        teamSlot: competition.teamSlot,
       },
       {
         headers: {

@@ -45,7 +45,7 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    category: "",
+    category: "Sports",
     imageUrl: "",
     registrationStartDate: "",
     registrationEndDate: "",
@@ -91,7 +91,7 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
       setFormData({
         name: "",
         description: "",
-        category: "",
+        category: "Sports",
         imageUrl: "",
         registrationStartDate: "",
         registrationEndDate: "",
