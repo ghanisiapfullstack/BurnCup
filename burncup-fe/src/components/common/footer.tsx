@@ -163,7 +163,7 @@ export default function Footer() {
                                 &copy; {new Date().getFullYear()} BurnCup Bekasi. All rights reserved.
                             </p>
                             <p className="text-sm sm:text-base text-[#001F54]/80 mt-1">
-                                Made with ❤️ by Software Engineering Major BurnCup
+                                Made by Achmed Fidel Ghibran Bn, Nicolas Maulana SS and the BurnCup Team.
                             </p>
                         </div>
                     </div>

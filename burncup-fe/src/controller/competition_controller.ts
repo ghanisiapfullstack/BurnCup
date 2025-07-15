@@ -5,7 +5,7 @@ const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    withCredentials: false, // Enable sending cookies and credentials for CORS
+    withCredentials: true, // Enable sending cookies and credentials for CORS
 });
 
 export async function fetchCompetitions(): Promise<Competition[]> {

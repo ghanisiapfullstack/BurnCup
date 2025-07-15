@@ -27,7 +27,7 @@ function CompetitionPage() {
   useEffect(() => {
     setLoading(true);
     fetchCompetitions()
-      .then((data) => setCompetitions(data))
+      .then((data) => setCompetitions(data || []))
       .catch(() => setCompetitions([]))
       .finally(() => setLoading(false));
   }, []);

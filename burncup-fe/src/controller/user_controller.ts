@@ -5,7 +5,7 @@ const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/protected`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    withCredentials: false,
+    withCredentials: true,
 });
 
 export async function fetchCurrentUser(token: string): Promise<User> {

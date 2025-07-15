@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, ReactNode } from "react"
 import {
   Calendar,
   Users,
@@ -28,7 +28,7 @@ import { User as UserModel } from "@/model/user_model"
 import { Team } from "@/model/team_model"
 import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
 import { getCurrentSession, logout } from "@/lib/actions/actions"
-import { fetchCurrentTeams } from "@/controller/team_controller"
+import { fetchCurrentTeams, fetchTeamQrUrl } from "@/controller/team_controller"
 import { Session } from "next-auth"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -101,13 +101,96 @@ function CountdownTimer({ targetDate, label }: { targetDate: string; label: stri
   )
 }
 
-function QRCodePayment({ amount, teamCode }: { amount: string; teamCode: string }) {
+const getCountdownColor = (timeLeft: number) => {
+  if (timeLeft <= 10) {
+    // Last 10 seconds: warning red
+    return "bg-red-100 text-red-800";
+  } else if (timeLeft <= 60) {
+    // Last 1 minute: warning yellow
+    return "bg-yellow-100 text-yellow-800";
+  } else {
+    // Default: blue
+    return "bg-blue-100 text-blue-800";
+  }
+};
+
+function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: string; teamCode: string; isTeamLeader: boolean, isOpen: boolean }) {
+  const restartTime = 10;
   const [copied, setCopied] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [timeLeft, setTimeLeft] = useState(restartTime);
+  const [qrLink, setQrLink] = useState<string | null>(null);
+
+  const {showError} = useToast();
 
   const copyTeamCode = () => {
     navigator.clipboard.writeText(teamCode)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const refreshCode = async () => {
+    setIsLoading(true);
+    try {
+      const token = await (await fetch("/api/token")).json();
+      const qrUrl = await fetchTeamQrUrl(teamCode, token.token);
+      setQrLink(qrUrl);
+    } catch (error: any) {
+      if (error.response) {
+        const errorMessage = error.response.data.error;
+        showError("Failed to fetch qr link", errorMessage);
+      } else if (error.request) {
+        console.error("Failed to fetch qr link: No response received", error.request);
+      } else {
+        console.error("Failed to fetch qr link:", error.message);
+      }
+      setQrLink(null);
+    }
+
+    setTimeLeft(restartTime);
+    setIsLoading(false)
+  }
+  
+  useEffect(() => {
+    if (!isOpen) {
+      setIsLoading(true)
+      return;
+    }
+    refreshCode();
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    if (timeLeft <= 0) {
+      refreshCode();
+      return;
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, isOpen]);
+
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+
+  const formattedMinutes = String(minutes).padStart(2, "0");
+  const formattedSeconds = String(seconds).padStart(2, "0");
+
+  const countdownColor = getCountdownColor(timeLeft);
+
+  const qrCodeLoading: ReactNode = (
+    <div>
+      <QrCode className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-2" />
+      <p className="text-sm text-gray-500">{isTeamLeader ? 'Loading....' : 'Waiting...'}</p>
+      <p className="text-xs text-gray-400">{isTeamLeader ? 'Getting your QR Code': 'Waiting for your team leader...'}</p>
+    </div>
+  )
+
+  if (!isOpen) {
+    return null;
   }
 
   return (
@@ -121,11 +204,22 @@ function QRCodePayment({ amount, teamCode }: { amount: string; teamCode: string 
       <div className="flex justify-center mb-4">
         <div className="w-32 h-32 md:w-48 md:h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
           <div className="text-center">
-            <QrCode className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">QR Code</p>
-            <p className="text-xs text-gray-400">Payment Gateway</p>
+            {isLoading || qrLink == null ? qrCodeLoading : 
+            <Image
+              src={qrLink}
+              alt="QR Code"
+              width={300}
+              height={300}
+              className='object-contain'
+            />}
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-center space-x-2 mb-3">
+        <span className={`${countdownColor} px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base`}>
+          {formattedMinutes}:{formattedSeconds}
+        </span>
       </div>
 
       <div className="text-center">
@@ -740,7 +834,7 @@ export function Dashboard() {
 
                             {/* Payment QR Code */}
                             <div className="order-last lg:order-none">
-                              <QRCodePayment amount={competition.competition.registrationfee.toString()} teamCode={competition.teamCode} />
+                              <QRCodePayment amount={competition.competition.registrationfee.toString()} teamCode={competition.teamCode} isTeamLeader={competition.teamLeader.email == user?.email} isOpen={expandedCompetitions.has(competition.id)} />
                             </div>
 
                             {/* Team Information */}

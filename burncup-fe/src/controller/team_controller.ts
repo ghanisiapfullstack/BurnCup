@@ -6,18 +6,16 @@ const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/protected`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
-    withCredentials: false,
+    withCredentials: true,
 });
 
 export async function fetchCurrentTeams(token: string): Promise<Team[]> {
   try {
-    console.log("Fetching teams");
     const res = await axiosInstance.get<Team[]>("get-teams", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Fetched teams:", res.data);
     return res.data;
   } catch (err) {
     console.error("Error fetching user:", err);
@@ -65,6 +63,20 @@ export async function JoinTeamByCode(token: string, teamCode: string, compId: st
     return res.data;
   } catch (err) {
     console.error("Error updating user:", err);
+    throw err;
+  }
+}
+
+export async function fetchTeamQrUrl(teamCode: string, token: string): Promise<string> {
+  try {
+    const res = await axiosInstance.get<{ qrLink: string }>(`get-qr-link/${teamCode}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.qrLink;
+  } catch (err) {
+    console.error("Error fetching team QR URL:", err);
     throw err;
   }
 }
