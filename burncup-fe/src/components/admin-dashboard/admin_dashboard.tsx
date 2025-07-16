@@ -264,11 +264,11 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
                 <input
                   type="number"
                   min="0"
-                  value={formData.registrationfee}
+                  value={formData.registrationfee === 0 ? "" : formData.registrationfee}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, registrationfee: Number.parseInt(e.target.value) || 0 }))
                   }
-                  placeholder="250000"
+                  placeholder="50000"
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -318,7 +318,7 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
                 <input
                   type="number"
                   min="1"
-                  max="15"
+                  max=""
                   value={formData.teamSlot}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, teamSlot: Number.parseInt(e.target.value) || 8 }))

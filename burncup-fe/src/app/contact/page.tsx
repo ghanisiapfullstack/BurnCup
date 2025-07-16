@@ -1,3 +1,7 @@
+"use client"
+
+import { useState, useEffect } from "react"
+
 const contactData = [
   {
     name: "Vinesya",
@@ -26,11 +30,17 @@ const contactData = [
 ]
 
 export default function ContactPage() {
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsPageLoaded(true);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-[#F2EDDA]">
+    <div className={`min-h-screen bg-[#F2EDDA] transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         {/* Contact Persons Section */}
-        <section className="mb-16 sm:mb-20 md:mb-24">
+        <section className={`mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 delay-200 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#001F54] mb-4 sm:mb-6">
               Contact Persons
@@ -100,7 +110,7 @@ export default function ContactPage() {
         </section>
 
         {/* Official Contacts Section */}
-        <section className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16 border border-gray-100">
+        <section className={`bg-white rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16 border border-gray-100 transition-all duration-1000 delay-400 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#001F54] mb-4 sm:mb-6">
               Official Contacts

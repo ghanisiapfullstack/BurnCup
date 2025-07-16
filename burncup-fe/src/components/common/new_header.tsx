@@ -52,7 +52,7 @@ export function Header() {
   }
 
   return (
-    <header className="py-4 bg-gradient-to-r from-gradient-left-primary to-gradient-right-primary shadow-xl relative z-50 backdrop-blur-sm">
+    <header className="py-4 bg-[#F4C261] shadow-xl relative z-50 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo Section */}

@@ -78,21 +78,20 @@ function CountdownTimer({ targetDate, label }: { targetDate: string; label: stri
 
   return (
     <div className="text-center">
-      <p className="text-sm font-medium text-gray-600 mb-2">{label}</p>
-      <div className="grid grid-cols-4 gap-1 md:gap-2">
-        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+      <p className="text-sm font-medium text-gray-600 mb-2">{label}</p>        <div className="grid grid-cols-4 gap-1 md:gap-2">
+        <div className="bg-[#001F54] text-white p-1.5 md:p-2 rounded-lg">
           <div className="text-sm md:text-lg font-bold">{timeLeft.days}</div>
           <div className="text-xs">Days</div>
         </div>
-        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+        <div className="bg-[#001F54] text-white p-1.5 md:p-2 rounded-lg">
           <div className="text-sm md:text-lg font-bold">{timeLeft.hours}</div>
           <div className="text-xs">Hours</div>
         </div>
-        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+        <div className="bg-[#001F54] text-white p-1.5 md:p-2 rounded-lg">
           <div className="text-sm md:text-lg font-bold">{timeLeft.minutes}</div>
           <div className="text-xs">Minutes</div>
         </div>
-        <div className="bg-blue-600 text-white p-1.5 md:p-2 rounded-lg">
+        <div className="bg-[#001F54] text-white p-1.5 md:p-2 rounded-lg">
           <div className="text-sm md:text-lg font-bold">{timeLeft.seconds}</div>
           <div className="text-xs">Seconds</div>
         </div>
@@ -225,7 +224,7 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
       <div className="text-center">
         <p className="text-sm text-gray-600 mb-2">Team Code for Reference:</p>
         <div className="flex items-center justify-center space-x-2">
-          <span className="bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base">
+          <span className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base">
             {teamCode}
           </span>
           <button onClick={copyTeamCode} className="p-1 text-gray-500 hover:text-blue-600 transition-colors">
@@ -242,8 +241,8 @@ function TeamMemberCard({ member, isLeader = false }: { member: UserModel; isLea
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start space-x-3">
-        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-          {isLeader ? <Crown className="w-6 h-6 text-yellow-600" /> : <User className="w-6 h-6 text-blue-600" />}
+        <div className="w-12 h-12 bg-gradient-to-r from-[#001F54] to-[#003875] rounded-full flex items-center justify-center">
+          {isLeader ? <Crown className="w-6 h-6 text-yellow-400" /> : <User className="w-6 h-6 text-white" />}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-1">
@@ -259,15 +258,15 @@ function TeamMemberCard({ member, isLeader = false }: { member: UserModel; isLea
 
           {member.binusian == true ? (
             <div className="space-y-1">
-              <p className="text-xs text-blue-600">
+              <p className="text-xs text-gray-600">
                 <span className="font-medium">NIM:</span> {member.nim}
               </p>
-              <p className="text-xs text-blue-600">
+              <p className="text-xs text-gray-600">
                 <span className="font-medium">Major:</span> {member.major}
               </p>
             </div>
           ) : (
-            <p className="text-xs text-green-600">
+            <p className="text-xs text-gray-600">
               <span className="font-medium">School:</span> {member.school}
             </p>
           )}
@@ -325,8 +324,8 @@ function EditProfileModal({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-2xl border border-white/30 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200">
           <h2 className="text-xl md:text-2xl font-bold text-gray-900">Edit Profile</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
@@ -342,7 +341,7 @@ function EditProfileModal({
               value={formData.binusian ? "binusian" : "non-binusian"}
               onChange={(e) => handleInputChange("binusian", e.target.value == "binusian")}
               disabled = {user != emptyUser}
-              className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50 text-sm md:text-base"
+              className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent bg-gradient-to-r from-[#001F54]/10 to-[#003875]/10 text-sm md:text-base"
             >
               <option value="binusian">Binusian</option>
               <option value="non-binusian">Non Binusian</option>
@@ -361,7 +360,7 @@ function EditProfileModal({
                 onChange={(e) => handleInputChange("fullName", e.target.value)}
                 placeholder="Enter your full name"
                 required
-                className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
               />
             </div>
 
@@ -376,7 +375,7 @@ function EditProfileModal({
                 onChange={(e) => handleInputChange("phoneNumber", e.target.value)}
                 placeholder="Enter your phone number"
                 required
-                className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
               />
             </div>
 
@@ -393,7 +392,7 @@ function EditProfileModal({
                     onChange={(e) => handleInputChange("nim", e.target.value)}
                     placeholder="Enter your NIM"
                     required
-                    className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                    className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
                   />
                 </div>
                 <div className="space-y-2 md:col-span-2">
@@ -406,7 +405,7 @@ function EditProfileModal({
                     onChange={(e) => handleInputChange("major", e.target.value)}
                     placeholder="Enter your major"
                     required
-                    className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                    className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
                   />
                 </div>
               </>
@@ -421,7 +420,7 @@ function EditProfileModal({
                   onChange={(e) => handleInputChange("school", e.target.value)}
                   placeholder="Enter your school"
                   required
-                  className="w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base"
+                  className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
                 />
               </div>
             )}
@@ -439,7 +438,7 @@ function EditProfileModal({
             <button
               type="submit"
               disabled={isLoading || formData == user}
-              className="w-full sm:w-auto px-4 md:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm md:text-base"
+              className="w-full sm:w-auto px-4 md:px-6 py-2 bg-gradient-to-r from-[#001F54] to-[#003875] text-white rounded-lg hover:from-[#003875] hover:to-[#001F54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm md:text-base"
             >
               <Save className="w-4 h-4" />
               <span>{isLoading ? "Saving..." : "Save Changes"}</span>
@@ -565,33 +564,35 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 py-6 md:py-8 px-4">
+      <div className="py-6 md:py-8 px-4">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2">Sports Dashboard</h1>
-              <p className="text-sm md:text-base text-blue-800">
-                Welcome back, <span className="font-semibold">{session?.user?.name}</span>!
-              </p>
-              <p className="text-sm md:text-base text-blue-800 hidden md:block">
-                Here are your registered competitions across different sports.
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-              <div className="text-left sm:text-right">
-                <div className="inline-block bg-blue-900 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold">
-                  Burncup 2025 Participant
-                </div>
+          <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 md:p-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Sports Dashboard</h1>
+                <p className="text-sm md:text-base text-gray-700">
+                  Welcome back, <span className="font-semibold text-blue-600">{session?.user?.name}</span>!
+                </p>
+                <p className="text-sm md:text-base text-gray-600 hidden md:block">
+                  Here are your registered competitions across different sports.
+                </p>
               </div>
-              <button
-                onClick={handleLogout}
-                className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 text-sm md:text-base"
-              >
-                <LogOut className="w-3 h-3 md:w-4 md:h-4" />
-                <span>Logout</span>
-              </button>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="text-left sm:text-right">
+                  <div className="inline-block bg-blue-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-semibold">
+                    Burncup 2025 Participant
+                  </div>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 md:px-4 md:py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 text-sm md:text-base"
+                >
+                  <LogOut className="w-3 h-3 md:w-4 md:h-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -603,7 +604,7 @@ export function Dashboard() {
         <div className="lg:hidden mb-6">
           <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4">
             <div className="flex items-center space-x-4">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-16 h-16 bg-gradient-to-r from-[#001F54] to-[#003875] rounded-full flex items-center justify-center flex-shrink-0">
                 <Image
                   src={session?.user?.image || "/default-profile.png"}
                   alt="Profile Picture"
@@ -618,7 +619,7 @@ export function Dashboard() {
                 <div className="flex items-center space-x-2 mt-1">
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                      user?.binusian === true ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                      user?.binusian === true ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white" : "bg-green-100 text-green-800"
                     }`}
                   >
                     {user?.binusian === true ? "Binusian" : "Non-Binusian"}
@@ -628,7 +629,7 @@ export function Dashboard() {
               </div>
               <button
                 onClick={() => setIsEditProfileOpen(true)}
-                className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors flex-shrink-0"
+                className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white p-2 rounded-lg hover:from-[#003875] hover:to-[#001F54] transition-all flex-shrink-0"
               >
                 <Edit className="w-4 h-4" />
               </button>
@@ -641,7 +642,7 @@ export function Dashboard() {
           <div className="hidden lg:block lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-6 sticky top-8">
               <div className="text-center mb-6">
-                <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-20 h-20 bg-gradient-to-r from-[#001F54] to-[#003875] rounded-full flex items-center justify-center mx-auto mb-4">
                   <Image
                   src={session?.user?.image || "/default-profile.png"}
                   alt="Profile Picture"
@@ -654,7 +655,7 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600 mb-2">{session?.user?.email}</p>
                 <span
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    user?.binusian === true ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"
+                    user?.binusian === true ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white" : "bg-green-100 text-green-800"
                   }`}
                 >
                   {user?.binusian === true ? "Binusian" : "Non-Binusian"}
@@ -693,7 +694,7 @@ export function Dashboard() {
 
               <button
                 onClick={() => setIsEditProfileOpen(true)}
-                className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+                className="w-full bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-4 py-2 rounded-lg font-medium hover:from-[#003875] hover:to-[#001F54] transition-all flex items-center justify-center space-x-2"
               >
                 <Edit className="w-4 h-4" />
                 <span>{user == emptyUser ? 'Complete Profile' : 'Edit Profile'}</span>
@@ -712,7 +713,7 @@ export function Dashboard() {
                 </p>
                 <button 
                 onClick={() => router.push("/competition")}
-                className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm md:text-base">
+                className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:from-[#003875] hover:to-[#001F54] transition-all text-sm md:text-base">
                   Browse Competitions
                 </button>
               </div>
@@ -726,7 +727,7 @@ export function Dashboard() {
                   <div className="flex space-x-2">
                     <button
                       onClick={expandAll}
-                      className="text-xs md:text-sm bg-blue-100 text-blue-700 hover:bg-blue-200 px-2 py-1 md:px-3 md:py-1 rounded-lg transition-colors"
+                      className="text-xs md:text-sm bg-gradient-to-r from-[#001F54] to-[#003875] text-white hover:from-[#003875] hover:to-[#001F54] px-2 py-1 md:px-3 md:py-1 rounded-lg transition-all"
                     >
                       Expand All
                     </button>
@@ -750,7 +751,7 @@ export function Dashboard() {
                     >
                       {/* Accordion Header - Always Visible */}
                       <div
-                        className="bg-blue-600 text-white p-3 md:p-4 cursor-pointer hover:bg-blue-700 transition-colors"
+                        className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white p-3 md:p-4 cursor-pointer hover:from-[#003875] hover:to-[#001F54] transition-all"
                         onClick={() => toggleCompetition(competition.id)}
                       >
                         <div className="flex items-center justify-between">
@@ -758,10 +759,10 @@ export function Dashboard() {
                             <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3">
                               <h3 className="text-lg md:text-xl font-bold truncate">{competition.competition.name}</h3>
                               <div className="flex flex-wrap gap-1">
-                                <span className="bg-blue-500 text-blue-100 px-2 py-0.5 rounded-full text-xs font-medium">
+                                <span className="bg-[#003875] text-white px-2 py-0.5 rounded-full text-xs font-medium">
                                   {competition.competition.competitionType}
                                 </span>
-                                <span className="bg-blue-800 text-blue-200 px-2 py-0.5 rounded-full text-xs font-medium">
+                                <span className="bg-[#001F54] text-white px-2 py-0.5 rounded-full text-xs font-medium">
                                   {competition.competition.category}
                                 </span>
                               </div>
@@ -769,7 +770,7 @@ export function Dashboard() {
 
                             {/* Mobile-specific info */}
                             <div className="mt-2 sm:hidden">
-                              <div className="flex items-center space-x-2 text-xs text-blue-100">
+                              <div className="flex items-center space-x-2 text-xs text-white">
                                 <MapPin className="w-3 h-3" />
                                 <span className="truncate">{competition.competition.venue}</span>
                               </div>
@@ -781,11 +782,11 @@ export function Dashboard() {
                             <div className="hidden sm:block text-right text-sm">
                               <div className="flex items-center space-x-2 mb-1">
                                 <MapPin className="w-3 h-3" />
-                                <span className="text-blue-100">{competition.competition.venue}</span>
+                                <span className="text-white">{competition.competition.venue}</span>
                               </div>
                               <div className="flex items-center space-x-2">
                                 <Trophy className="w-3 h-3" />
-                                <span className="text-blue-100">{competition.competition.registrationfee}</span>
+                                <span className="text-white">{competition.competition.registrationfee}</span>
                               </div>
                             </div>
 
@@ -802,9 +803,9 @@ export function Dashboard() {
 
                               <div className="flex items-center">
                                 {isExpanded ? (
-                                  <ChevronUp className="w-5 h-5 text-blue-200" />
+                                  <ChevronUp className="w-5 h-5 text-white" />
                                 ) : (
-                                  <ChevronDown className="w-5 h-5 text-blue-200" />
+                                  <ChevronDown className="w-5 h-5 text-white" />
                                 )}
                               </div>
                             </div>
@@ -839,27 +840,27 @@ export function Dashboard() {
 
                             {/* Team Information */}
                             <div className="space-y-4">
-                              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                              <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <div className="flex items-center justify-between mb-3">
-                                  <h4 className="text-base md:text-lg font-semibold text-blue-900">
+                                  <h4 className="text-base md:text-lg font-semibold text-gray-900">
                                     {competition.competition.maxMembers == null
                                       ? "Participant Info"
                                       : "Team Information"}
                                   </h4>
-                                  <Users className="w-4 h-4 md:w-5 md:h-5 text-blue-600" />
+                                  <Users className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
                                 </div>
                                 <div className="space-y-2">
                                   {competition.competition.maxMembers != null && (
                                     <>
                                       <div>
                                         <span className="text-sm font-medium text-gray-600">Team Name:</span>
-                                        <p className="text-base md:text-lg font-bold text-blue-900">
+                                        <p className="text-base md:text-lg font-bold text-gray-900">
                                           {competition.teamName}
                                         </p>
                                       </div>
                                       <div>
                                         <span className="text-sm font-medium text-gray-600">Team Code:</span>
-                                        <p className="text-base md:text-lg font-mono font-bold text-blue-900">
+                                        <p className="text-base md:text-lg font-mono font-bold text-gray-900">
                                           {competition.teamCode}
                                         </p>
                                       </div>
@@ -869,7 +870,7 @@ export function Dashboard() {
                                     <span className="text-sm font-medium text-gray-600">
                                       {competition.competition.maxMembers == null ? "Category:" : "Total Members:"}
                                     </span>
-                                    <p className="text-base md:text-lg font-bold text-blue-900">
+                                    <p className="text-base md:text-lg font-bold text-gray-900">
                                       {competition.competition.maxMembers == null
                                         ? "Individual Participant"
                                         : `${competition.members.length + 1} Players`}
@@ -910,7 +911,7 @@ export function Dashboard() {
                                 <span>Complete Payment</span>
                               </button>
                             )}
-                            <button className="bg-blue-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
+                            <button className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:from-[#003875] hover:to-[#001F54] transition-all flex items-center justify-center space-x-2 text-sm md:text-base">
                               <Calendar className="w-4 h-4" />
                               <span>View Schedule</span>
                             </button>

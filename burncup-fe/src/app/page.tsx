@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import '@/app/globals.css';
 
 function CompetitionCategoriesCard() {
@@ -209,6 +210,16 @@ function EventTimeline() {
 
 export default function Home() {
   const router = useRouter();
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+  useEffect(() => {
+    // Trigger the fade-in animation after component mounts
+    const timer = setTimeout(() => {
+      setIsPageLoaded(true);
+    }, 100); // Small delay to ensure smooth transition
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleRegisterClick = () => {
     router.push('/login');
@@ -219,7 +230,7 @@ export default function Home() {
   };
 
   return (
-    <div className="overflow-x-hidden">
+    <div className={`overflow-x-hidden transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
       {/* Modern Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center bg-fixed" style={{
         backgroundImage: 'url(/images/home_hero.png)',
@@ -319,10 +330,10 @@ export default function Home() {
               
               <div className="space-y-4 sm:space-y-6">
                 <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Burncup adalah Kompetisi tahunan yang digelar oleh Binus University Bekasi. Sampai sekarang, Acara ini terus menjadi ajang bagi para mahasiswa BINUS Bekasi dan para pelajar SMA/SMK/MA Jabodetabek untuk menunjukkan bakat, menjalin persahabatan dan memperebutkan piala bergilir.
+                  Burncup is an annual competition hosted by Binus University Bekasi. To this day, the event continues to be a platform for Binus Bekasi university students and high school/vocational school students from the Greater Jakarta area to showcase their talents, build friendships, and compete for the rotating trophy.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Kompetisi BurnCup 2025 hadir dengan konsep dan tema baru yaitu "The Global Odessey". Dalam konteks acara ini, "The Global Odessey" melambangkan perjalanan penuh rintangan bagi peserta dalam meraih gelar juara. Adapun Slogan Burncup kali ini yaitu "Compete, Explore and Conquer".
+                  Burncup 2025 comes with a new concept and theme: "The Global Odyssey." In the context of this event, "The Global Odyssey" symbolizes a challenging journey for participants in their quest for the championship title. This year's Burncup slogan is "Compete, Explore, and Conquer."
                 </p>
               </div>
 
@@ -332,7 +343,7 @@ export default function Home() {
                   17 Categories
                 </span>
                 <span className="bg-[#E6B85C] text-blue-900 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  800+ Participants
+                  1000+ Participants
                 </span>
                 <span className="bg-blue-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-shadow duration-300">
                   Prestigious Awards
