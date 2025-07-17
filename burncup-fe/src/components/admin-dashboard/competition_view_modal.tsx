@@ -1,6 +1,6 @@
 "use client"
 
-import { X, Trophy, FileText, CheckCircle, MapPin, Calendar, Users, DollarSign, ImageIcon } from "lucide-react"
+import { X, Trophy, FileText, CheckCircle, MapPin, Calendar, Users, DollarSign} from "lucide-react"
 import type { Competition } from "@/model/competition_model"
 
 interface CompetitionViewModalProps {

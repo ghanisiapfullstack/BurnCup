@@ -31,7 +31,7 @@ import { CompetitionStats, type Competition } from "@/model/competition_model"
 import type { Team } from "@/model/team_model"
 import { CompetitionCarousel } from "./competition_carousel"
 import { AdminBasicInfoResponse } from "@/model/admin_model"
-import { addCompetition, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams, updateCompetition } from "@/controller/admin_controller"
+import { addCompetition, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams, updateCompetition} from "@/controller/admin_controller"
 import { fetchCompetitions } from "@/controller/competition_controller"
 
 interface AddCompetitionModalProps {
@@ -1009,12 +1009,10 @@ export function AdminDashboard() {
               className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">All Categories</option>
-              <option value="Basketball">Basketball</option>
-              <option value="Futsal">Futsal</option>
-              <option value="Volleyball">Volleyball</option>
-              <option value="Badminton">Badminton</option>
+              <option value="Sports">Sports</option>
               <option value="E-Sports">E-Sports</option>
-              <option value="Table Tennis">Table Tennis</option>
+              <option value="Creative">Creative</option>
+              <option value="Automotive">Automotive</option>
             </select>
             <select
               value={filterPaymentStatus}
