@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useState, useEffect, ReactNode } from "react"
 import {
-  Calendar,
   Users,
   Trophy,
   QrCode,
@@ -22,13 +21,14 @@ import {
   Phone,
   GraduationCap,
   School,
+  Trash2,
 } from "lucide-react"
 
 import { User as UserModel } from "@/model/user_model"
 import { Team } from "@/model/team_model"
 import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
 import { getCurrentSession, logout } from "@/lib/actions/actions"
-import { fetchCurrentTeams, fetchTeamQrUrl } from "@/controller/team_controller"
+import { deleteTeamMember, fetchCurrentTeams, fetchTeamQrUrl } from "@/controller/team_controller"
 import { Session } from "next-auth"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -249,9 +249,28 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
   )
 }
 
-function TeamMemberCard({ member, isLeader = false }: { member: UserModel; isLeader?: boolean }) {
+function TeamMemberCard({ 
+  member, 
+  isLeader = false, 
+  canDelete = false, 
+  onDelete 
+}: { 
+  member: UserModel; 
+  isLeader?: boolean; 
+  canDelete?: boolean; 
+  onDelete?: () => void; 
+}) {
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow relative">
+      {canDelete && (
+        <button
+          onClick={onDelete}
+          className="absolute top-2 right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center transition-colors z-10"
+          title="Remove member"
+        >
+          <X className="w-3 h-3" />
+        </button>
+      )}
       <div className="flex items-start space-x-3">
         <div className="w-12 h-12 bg-gradient-to-r from-[#001F54] to-[#003875] rounded-full flex items-center justify-center">
           {isLeader ? <Crown className="w-6 h-6 text-yellow-400" /> : <User className="w-6 h-6 text-white" />}
@@ -462,6 +481,52 @@ function EditProfileModal({
   )
 }
 
+function ConfirmDeleteModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  memberName,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  memberName: string;
+}) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-white/30 w-full max-w-md">
+        <div className="p-6">
+          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full">
+            <Trash2 className="w-6 h-6 text-red-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 text-center mb-2">
+            Remove Team Member
+          </h3>
+          <p className="text-sm text-gray-600 text-center mb-6">
+            Are you sure you want to remove <span className="font-semibold">{memberName}</span> from the team? This action cannot be undone.
+          </p>
+          <div className="flex space-x-3">
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export const emptyUser: UserModel = {
   fullName: "-",
   email: "-",
@@ -479,9 +544,21 @@ export function Dashboard() {
   const [expandedCompetitions, setExpandedCompetitions] = useState<Set<string>>(new Set())
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false)
   const [session, setSession] = useState<Session | null>(null)
+  const [isManagingTeam, setIsManagingTeam] = useState<Set<string>>(new Set())
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    memberName: string;
+    memberId: string;
+    teamId: string;
+  }>({
+    isOpen: false,
+    memberName: '',
+    memberId: '',
+    teamId: '',
+  })
 
   const router = useRouter()
-  const {showError} = useToast();
+  const {showError, showSuccess} = useToast();
 
   
 
@@ -561,6 +638,61 @@ export function Dashboard() {
 
   const handleSaveProfile = (userData: UserModel) => {
     setUser(userData)
+  }
+
+  const toggleManageTeam = (teamId: string) => {
+    const newManaging = new Set(isManagingTeam)
+    if (newManaging.has(teamId)) {
+      newManaging.delete(teamId)
+    } else {
+      newManaging.add(teamId)
+    }
+    setIsManagingTeam(newManaging)
+  }
+
+  const handleDeleteMember = (teamId: string, memberId: string, memberName: string) => {
+    setDeleteModal({
+      isOpen: true,
+      memberName,
+      memberId,
+      teamId,
+    })
+  }
+
+  const confirmDeleteMember = async () => {
+    try {
+        const token = await (await fetch("/api/token")).json();
+        (await deleteTeamMember(token.token, deleteModal.teamId, deleteModal.memberId));
+        console.log(`Deleting member ${deleteModal.memberId} from team ${deleteModal.teamId}`)
+
+        setDeleteModal({
+          isOpen: false,
+          memberName: '',
+          memberId: '',
+          teamId: '',
+        })
+    
+        // You can add toast notification here
+        showSuccess("Member removed", `${deleteModal.memberName} has been removed from the team`)
+      } catch (error: any) {
+          if (error.response) {
+            const errorMessage = error.response.data.error;
+            showError("Failed to fetch competition", errorMessage);
+          } else if (error.request) {
+            console.error("Failed to fetch competition: No response received", error.request);
+          } else {
+            console.error("Failed to fetch competition:", error.message);
+      }
+    }
+  }
+
+  const closeDeleteModal = () => {
+    setDeleteModal({
+      isOpen: false,
+      memberName: '',
+      memberId: '',
+      teamId: '',
+    })
   }
 
   if (isLoading) {
@@ -739,13 +871,21 @@ export function Dashboard() {
                   <div className="flex space-x-2">
                     <button
                       onClick={expandAll}
-                      className="text-xs md:text-sm bg-gradient-to-r from-[#001F54] to-[#003875] text-white hover:from-[#003875] hover:to-[#001F54] px-2 py-1 md:px-3 md:py-1 rounded-lg transition-all"
+                      className={`text-xs md:text-sm px-2 py-1 md:px-3 md:py-1 rounded-lg transition-all ${
+                        expandedCompetitions.size === competitions?.length
+                          ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gradient-to-r hover:from-[#001F54] hover:to-[#003875] hover:text-white"
+                      }`}
                     >
                       Expand All
                     </button>
                     <button
                       onClick={collapseAll}
-                      className="text-xs md:text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-2 py-1 md:px-3 md:py-1 rounded-lg transition-colors"
+                      className={`text-xs md:text-sm px-2 py-1 md:px-3 md:py-1 rounded-lg transition-all ${
+                        expandedCompetitions.size === 0
+                          ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gradient-to-r hover:from-[#001F54] hover:to-[#003875] hover:text-white"
+                      }`}
                     >
                       Collapse All
                     </button>
@@ -905,32 +1045,47 @@ export function Dashboard() {
                               <TeamMemberCard
                                 member={competition.teamLeader}
                                 isLeader={competition.competition.maxMembers != null}
+                                canDelete={false} // Leaders cannot be deleted
                               />
 
                               {/* Team Members (only for team sports) */}
                               {competition.competition.maxMembers != null &&
-                                competition.members.map((member) => (
-                                  <TeamMemberCard key={member.fullName} member={member} />
+                                competition.members.map((member, index) => (
+                                  <TeamMemberCard 
+                                    key={`${member.email}-${index}`} 
+                                    member={member} 
+                                    canDelete={
+                                      isManagingTeam.has(competition.id) && 
+                                      competition.teamLeader.email === user?.email
+                                    }
+                                    onDelete={() => handleDeleteMember(
+                                      competition.id, 
+                                      member.email, 
+                                      member.fullName
+                                    )}
+                                  />
                                 ))}
                             </div>
                           </div>
 
                           {/* Action Buttons */}
                           <div className="mt-6 md:mt-8 flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
-                            {competition.isPaid === false && (
-                              <button className="bg-green-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
-                                <QrCode className="w-4 h-4" />
-                                <span>Complete Payment</span>
+                            {competition.competition.maxMembers != null && 
+                             competition.teamLeader.email === user?.email && (
+                              <button 
+                                onClick={() => toggleManageTeam(competition.id)}
+                                className={`px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2 text-sm md:text-base ${
+                                  isManagingTeam.has(competition.id)
+                                    ? "bg-red-600 text-white hover:bg-red-700"
+                                    : "border border-gray-300 text-gray-700 hover:bg-gray-50"
+                                }`}
+                              >
+                                <Users className="w-4 h-4" />
+                                <span>
+                                  {isManagingTeam.has(competition.id) ? "Stop Managing" : "Manage Team"}
+                                </span>
                               </button>
                             )}
-                            <button className="bg-gradient-to-r from-[#001F54] to-[#003875] text-white px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:from-[#003875] hover:to-[#001F54] transition-all flex items-center justify-center space-x-2 text-sm md:text-base">
-                              <Calendar className="w-4 h-4" />
-                              <span>View Schedule</span>
-                            </button>
-                            <button className="border border-gray-300 text-gray-700 px-4 py-2 md:px-6 md:py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2 text-sm md:text-base">
-                              <Users className="w-4 h-4" />
-                              <span>Manage Team</span>
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -950,6 +1105,14 @@ export function Dashboard() {
         isOpen={isEditProfileOpen}
         onClose={() => setIsEditProfileOpen(false)}
         onSave={handleSaveProfile}
+      />
+
+      {/* Delete Member Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDeleteMember}
+        memberName={deleteModal.memberName}
       />
     </div>
   )

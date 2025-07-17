@@ -81,3 +81,26 @@ export async function fetchTeamQrUrl(teamCode: string, token: string): Promise<Q
     throw err;
   }
 }
+
+// ...existing code...
+export async function deleteTeamMember(token: string, teamId: string, memberEmail: string): Promise<any> {
+  try {
+    const res = await axiosInstance.delete(
+      `delete-team-member`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        data: {
+          teamId: teamId,
+          memberEmail: memberEmail
+        }
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting team member:", err);
+    throw err;
+  }
+}
