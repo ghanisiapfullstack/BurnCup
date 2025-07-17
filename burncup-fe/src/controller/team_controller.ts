@@ -1,3 +1,4 @@
+import { QRPaymentResponse } from "@/model/payment_model";
 import { Team } from "@/model/team_model";
 import type { User } from "@/model/user_model";
 import axios from "axios";
@@ -67,14 +68,14 @@ export async function JoinTeamByCode(token: string, teamCode: string, compId: st
   }
 }
 
-export async function fetchTeamQrUrl(teamCode: string, token: string): Promise<string> {
+export async function fetchTeamQrUrl(teamCode: string, token: string): Promise<QRPaymentResponse> {
   try {
-    const res = await axiosInstance.get<{ qrLink: string }>(`get-qr-link/${teamCode}`, {
+    const res = await axiosInstance.get<QRPaymentResponse>(`get-qr-link/${teamCode}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    return res.data.qrLink;
+    return res.data;
   } catch (err) {
     console.error("Error fetching team QR URL:", err);
     throw err;

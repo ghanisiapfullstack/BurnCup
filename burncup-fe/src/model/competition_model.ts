@@ -4,6 +4,8 @@ export interface Competition {
     description: string;
     category: string;
     imageUrl: string;
+    bookletUrl: string;
+    paidMessage: string;
     registrationStartDate: string;
     registrationEndDate: string;
     competitionStartDate: string;
@@ -14,9 +16,11 @@ export interface Competition {
     prizes: Prize[];
     requirements: string[];
     rules: string[];
-    maxMembers?: number; // Optional, for team competitions
-    minMembers?: number; // Optional, for team competitions
+    maxMembers?: number | null; // Optional, for team competitions
+    minMembers?: number | null; // Optional, for team competitions
     teamSlot: number; // Number of teams that can register
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface Prize {

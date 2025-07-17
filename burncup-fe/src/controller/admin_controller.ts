@@ -61,6 +61,47 @@ export async function addCompetition(token: string, competition: Competition): P
         description: competition.description,
         category: competition.category,
         imageUrl: competition.imageUrl,
+        bookletUrl: competition.bookletUrl,
+        paidMessage: competition.paidMessage,
+        registrationStartDate: competition.registrationStartDate,
+        registrationEndDate: competition.registrationEndDate,
+        competitionStartDate: competition.competitionStartDate,
+        competitionEndDate: competition.competitionEndDate,
+        competitionType: competition.competitionType,
+        venue: competition.venue,
+        registrationfee: competition.registrationfee,
+        prizes: competition.prizes ?? [],
+        requirements: competition.requirements ?? [],
+        rules: competition.rules ?? [],
+        maxMembers: competition.maxMembers ?? null,
+        minMembers: competition.minMembers ?? null,
+        teamSlot: competition.teamSlot,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error adding competition:", err);
+    throw err;
+  }
+}
+
+export async function updateCompetition(token: string, competition: Competition, compID: string): Promise<any> {
+  try {
+    const res = await axiosInstance.post(
+      `admin-update-competition/${compID}`,
+      {
+        name: competition.name,
+        description: competition.description,
+        category: competition.category,
+        imageUrl: competition.imageUrl,
+        bookletUrl: competition.bookletUrl,
+        paidMessage: competition.paidMessage,
         registrationStartDate: competition.registrationStartDate,
         registrationEndDate: competition.registrationEndDate,
         competitionStartDate: competition.competitionStartDate,

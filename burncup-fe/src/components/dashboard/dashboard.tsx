@@ -114,7 +114,7 @@ const getCountdownColor = (timeLeft: number) => {
 };
 
 function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: string; teamCode: string; isTeamLeader: boolean, isOpen: boolean }) {
-  const restartTime = 10;
+  const restartTime = 600;
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [timeLeft, setTimeLeft] = useState(restartTime);
@@ -132,8 +132,22 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
     setIsLoading(true);
     try {
       const token = await (await fetch("/api/token")).json();
-      const qrUrl = await fetchTeamQrUrl(teamCode, token.token);
-      setQrLink(qrUrl);
+      const qrRes = await fetchTeamQrUrl(teamCode, token.token);
+      setQrLink(qrRes.qrLink);
+
+      // Get current time
+      const now = new Date();
+      
+      const expiryTimeString = qrRes.expiryTime;
+
+      const expiryTime = new Date(expiryTimeString);
+      
+      // Calculate difference in milliseconds
+      const diffInMs = expiryTime.getTime() - now.getTime();
+      const diffInSeconds = Math.max(0, Math.floor(diffInMs / 1000));
+      
+      
+      setTimeLeft(diffInSeconds);
     } catch (error: any) {
       if (error.response) {
         const errorMessage = error.response.data.error;
@@ -145,8 +159,6 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
       }
       setQrLink(null);
     }
-
-    setTimeLeft(restartTime);
     setIsLoading(false)
   }
   

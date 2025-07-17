@@ -31,7 +31,7 @@ import { CompetitionStats, type Competition } from "@/model/competition_model"
 import type { Team } from "@/model/team_model"
 import { CompetitionCarousel } from "./competition_carousel"
 import { AdminBasicInfoResponse } from "@/model/admin_model"
-import { addCompetition, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams } from "@/controller/admin_controller"
+import { addCompetition, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams, updateCompetition } from "@/controller/admin_controller"
 import { fetchCompetitions } from "@/controller/competition_controller"
 
 interface AddCompetitionModalProps {
@@ -47,6 +47,8 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
     description: "",
     category: "Sports",
     imageUrl: "",
+    bookletUrl: "",
+    paidMessage: "",
     registrationStartDate: "",
     registrationEndDate: "",
     competitionStartDate: "",
@@ -70,6 +72,8 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
         description: editingCompetition.description,
         category: editingCompetition.category,
         imageUrl: editingCompetition.imageUrl,
+        bookletUrl: editingCompetition.bookletUrl || "",
+        paidMessage: editingCompetition.paidMessage || "",
         registrationStartDate: editingCompetition.registrationStartDate.split("T")[0],
         registrationEndDate: editingCompetition.registrationEndDate.split("T")[0],
         competitionStartDate: editingCompetition.competitionStartDate.split("T")[0],
@@ -93,6 +97,8 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
         description: "",
         category: "Sports",
         imageUrl: "",
+        bookletUrl: "",
+        paidMessage: "",
         registrationStartDate: "",
         registrationEndDate: "",
         competitionStartDate: "",
@@ -122,6 +128,8 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
       description: formData.description,
       category: formData.category,
       imageUrl: formData.imageUrl,
+      bookletUrl: formData.bookletUrl,
+      paidMessage: formData.paidMessage,
       registrationStartDate: `${formData.registrationStartDate}T00:00:00Z`,
       registrationEndDate: `${formData.registrationEndDate}T23:59:59Z`,
       competitionStartDate: `${formData.competitionStartDate}T09:00:00Z`,
@@ -140,7 +148,9 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
       requirements: formData.requirements.filter((req) => req.trim() !== ""),
       maxMembers: formData.maxMembers,
       minMembers: formData.minMembers,
-      teamSlot: formData.teamSlot
+      teamSlot: formData.teamSlot,
+      createdAt: editingCompetition?.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
 
     onSave(competitionData)
@@ -379,6 +389,28 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
                   onChange={(e) => setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))}
                   placeholder="https://example.com/image.jpg"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700">Booklet URL</label>
+                <input
+                  type="url"
+                  value={formData.bookletUrl}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, bookletUrl: e.target.value }))}
+                  placeholder="https://example.com/booklet.pdf"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700">Paid Message</label>
+                <textarea
+                  value={formData.paidMessage}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, paidMessage: e.target.value }))}
+                  placeholder="Enter message to show when payment is completed"
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 />
               </div>
             </div>
@@ -671,8 +703,23 @@ export function AdminDashboard() {
   // Competition handlers
   const handleAddCompetition = async (competitionData: Competition) => {
     if (editingCompetition) {
-      setCompetitions((prev) => prev.map((comp) => (comp.id === editingCompetition.id ? competitionData : comp)))
-      showSuccess("Competition Updated", `${competitionData.name} has been updated successfully.`)
+      try {
+        const token = await (await fetch("/api/token")).json();
+        const updateCompRes = await updateCompetition(token.token, competitionData, competitionData.id);
+        if (updateCompRes) {
+          setCompetitions((prev) => prev.map((comp) => (comp.id === editingCompetition.id ? competitionData : comp)))
+          showSuccess("Competition Updated", `${competitionData.name} has been updated successfully.`)
+        }
+      } catch (error: any) {
+        if (error.response) {
+          const errorMessage = error.response.data.error;
+          showError("Failed to update competition", errorMessage);
+        } else if (error.request) {
+          console.error("Failed to update competition: No response received", error.request);
+        } else {
+          console.error("Failed to update competition:", error.message);
+        }
+      }
     } else {
       try {
         const token = await (await fetch("/api/token")).json();
