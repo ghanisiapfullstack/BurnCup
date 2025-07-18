@@ -38,7 +38,7 @@ function CompetitionCategoriesCard() {
       hoverGradient: "group-hover:from-purple-600 group-hover:to-purple-800"
     },
     {
-      title: "Arts",
+      title: "Creative",
       icon: (
         <svg className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white transition-transform duration-300 group-hover:scale-110" viewBox="0 0 100 100" fill="currentColor">
           <ellipse cx="50" cy="70" rx="25" ry="8" />
@@ -51,7 +51,7 @@ function CompetitionCategoriesCard() {
           <circle cx="53" cy="32" r="2" />
         </svg>
       ),
-      description: "Cosplay, Art, Cake Decoration, Public Speaking, and much more!",
+      description: "Cosplay, Art, Cake Decoration, and much more!",
       gradient: "from-pink-500 to-pink-700",
       hoverGradient: "group-hover:from-pink-600 group-hover:to-pink-800"
     },
@@ -333,14 +333,14 @@ export default function Home() {
                   Burncup is an annual competition hosted by Binus University Bekasi. To this day, the event continues to be a platform for Binus Bekasi university students and high school/vocational school students from the Greater Jakarta area to showcase their talents, build friendships, and compete for the rotating trophy.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Burncup 2025 comes with a new concept and theme: "The Global Odyssey." In the context of this event, "The Global Odyssey" symbolizes a challenging journey for participants in their quest for the championship title. This year's Burncup slogan is "Compete, Explore, and Conquer."
+                  Burncup 2025 comes with a new concept and theme: "The Global Odyssey." In the context of this event, "The Global Odyssey" symbolizes a challenging journey for participants in their quest for the championship title. This year's Burncup slogan is "Compete, Explore, Conquer."
                 </p>
               </div>
 
               {/* Stats */}
               <div className="flex flex-wrap gap-3 sm:gap-4 pt-4 sm:pt-6">
                 <span className="bg-blue-900 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-shadow duration-300">
-                  17 Categories
+                  19 Categories
                 </span>
                 <span className="bg-[#E6B85C] text-blue-900 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-shadow duration-300">
                   1000+ Participants

@@ -63,9 +63,9 @@ export function Header() {
                 alt="Burncup Logo"
                 width={60}
                 height={60}
-                className="rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110 lg:w-20 lg:h-20"
+                className="rounded-full shadow-lg bg-gradient-to-r from-[#001F54] to-[#003875] transition-transform duration-300 group-hover:scale-110 lg:w-20 lg:h-20"
               />
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#F4C261] to-[#FFD700] rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              <div className="absolute -inset-1 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
             </div>
             <div className="hidden sm:block">
               <h1 className="text-xl md:text-2xl lg:text-3xl font-black text-[#001F54] group-hover:text-[#003875] transition-colors duration-300">

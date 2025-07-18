@@ -169,7 +169,7 @@ export default function ContactPage() {
 
               {/* TikTok */}
               <a 
-                href="https://tiktok.com/@burncup" 
+                href="https://www.tiktok.com/@burncup.binus" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-gray-800/5 hover:to-gray-800/10 transition-all duration-300 transform hover:scale-105"
@@ -207,10 +207,7 @@ export default function ContactPage() {
                     Visit Us
                   </p>
                   <p className="text-sm sm:text-base text-gray-600 group-hover:text-gray-700 transition-colors duration-300 leading-relaxed">
-                    Binus@Bekasi, Grand Summarecon Bekasi<br/>
-                    Jl. Lingkar Luar Barat No.7, RT.001/RW.008<br/>
-                    Harapan Mulya, Kec. Medan Satria<br/>
-                    Kota Bekasi, Jawa Barat 17143
+                    Kampus Binus Bekasi, Jalan Lingkar Boulevar Blok WA No.1 Summarecon Bekasi Kel, RT.006/RW.003, Marga Mulya, Kec. Bekasi Utara, Kota Bks, Jawa Barat 17142
                   </p>
                 </div>
               </a>

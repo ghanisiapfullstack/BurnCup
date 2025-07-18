@@ -27,11 +27,11 @@ export default function Footer() {
                         {/* Event Stats */}
                         <div className="grid grid-cols-3 gap-4 mb-6">
                             <div className="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                                <div className="text-2xl sm:text-3xl font-black text-[#001F54]">17</div>
+                                <div className="text-2xl sm:text-3xl font-black text-[#001F54]">19</div>
                                 <div className="text-xs sm:text-sm font-bold text-[#001F54]/70">Categories</div>
                             </div>
                             <div className="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
-                                <div className="text-2xl sm:text-3xl font-black text-[#001F54]">800+</div>
+                                <div className="text-2xl sm:text-3xl font-black text-[#001F54]">1000+</div>
                                 <div className="text-xs sm:text-sm font-bold text-[#001F54]/70">Participants</div>
                             </div>
                             <div className="text-center p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -128,18 +128,24 @@ export default function Footer() {
                                 {
                                     name: "Instagram",
                                     icon: "M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5A4.25 4.25 0 0 0 20.5 16.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm4.25 3.25a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5zm0 1.5a3.75 3.75 0 1 0 0 7.5 3.75 3.75 0 0 0 0-7.5zm5.25.75a1 1 0 1 1-2 0 1 1 0 0 1 2 0z",
+                                    href: "https://instagram.com/burncup",
                                 },
                                 {
                                     name: "TikTok",
                                     icon: "M17.5 2A3.5 3.5 0 0 0 14 5.5V16a2.5 2.5 0 1 1-2.5-2.5H12V11h-1.5A5.5 5.5 0 1 0 16 16V7.5h1.5A3.5 3.5 0 0 0 21 4V2h-3.5z",
+                                    href: "https://www.tiktok.com/@burncup.binus",
                                 },
                                 {
-                                    name: "Facebook",
-                                    icon: "M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z",
+                                    name: "YouTube",
+                                    icon: "M23.498 6.186a2.87 2.87 0 0 0-2.019-2.033C19.595 3.777 12 3.777 12 3.777s-7.595 0-9.479.376A2.87 2.87 0 0 0 .502 6.186C.126 8.075.126 12 .126 12s0 3.925.376 5.814a2.87 2.87 0 0 0 2.019 2.033C4.405 20.223 12 20.223 12 20.223s7.595 0 9.479-.376a2.87 2.87 0 0 0 2.019-2.033C23.874 15.925 23.874 12 23.874 12s0-3.925-.376-5.814zM9.757 15.428V8.572L15.84 12l-6.083 3.428z",
+                                    href: "https://www.youtube.com/@BURNCUP",
                                 },
                             ].map((social) => (
-                                <div
+                                <a
                                     key={social.name}
+                                    href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="group w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-[#001F54] transition-all duration-300 transform hover:scale-110 cursor-pointer"
                                 >
                                     <svg
@@ -149,7 +155,7 @@ export default function Footer() {
                                     >
                                         <path d={social.icon} />
                                     </svg>
-                                </div>
+                                </a>
                             ))}
                         </div>
                     </div>
