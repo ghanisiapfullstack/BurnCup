@@ -194,7 +194,7 @@ export default function ContactPage() {
                 href="https://maps.google.com/?q=BurnCup+Venue" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="group flex items-start gap-4 sm:gap-6 p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-red-50 hover:to-red-100 transition-all duration-300 transform hover:scale-105"
+                className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-red-50 hover:to-red-100 transition-all duration-300 transform hover:scale-105"
               >
                 <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
