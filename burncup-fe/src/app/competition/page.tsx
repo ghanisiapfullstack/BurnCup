@@ -109,8 +109,177 @@ export default function CompetitionPage() {
         </div>
       </section>
 
+      {/* Booklet Section */}
+      <section className={`py-12 sm:py-16 md:py-20 transition-all duration-1000 delay-600 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#001F54] mb-6">
+              Booklets
+            </h2>
+            <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto">
+              Download the official competition booklet for your category
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Binusian Booklet */}
+            <div className="group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:scale-105 overflow-hidden border border-gray-100">
+              <div className="bg-gradient-to-br from-[#001F54] to-[#003875] p-8 text-center relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#F4C261]/20 rounded-full"></div>
+                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[#FFD700]/20 rounded-full"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-[#F4C261] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-[#001F54]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-black text-white mb-2">Binusian</h3>
+                  <p className="text-[#F4C261]/80 text-sm">For Binus University Students</p>
+                </div>
+              </div>
+              <div className="p-8">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#F4C261] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Complete competition rules
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#F4C261] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Registration guidelines
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#F4C261] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Special Binusian privileges
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#F4C261] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Timeline & deadlines
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => window.open('https://drive.google.com/file/d/124qa1JLqrn7k973Oaw5M_oeIaMLaCkib/view?usp=sharing', '_blank')}
+                  className="w-full bg-gradient-to-r from-[#001F54] to-[#003875] text-white py-4 rounded-xl font-bold text-lg hover:from-[#003875] hover:to-[#001F54] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group-hover:shadow-2xl"
+                >
+                  Download Booklet
+                </button>
+              </div>
+            </div>
+
+            {/* SMA/K Booklet */}
+            <div className="group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:scale-105 overflow-hidden border border-gray-100">
+              <div className="bg-gradient-to-br from-[#F4C261] to-[#FFD700] p-8 text-center relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#001F54]/20 rounded-full"></div>
+                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[#003875]/20 rounded-full"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-[#001F54] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-[#F4C261]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-black text-[#001F54] mb-2">SMA/K</h3>
+                  <p className="text-[#001F54]/70 text-sm">For High School Students</p>
+                </div>
+              </div>
+              <div className="p-8">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#001F54] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Student-friendly format
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#001F54] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Age-appropriate categories
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#001F54] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Registration process guide
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#001F54] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Competition schedules
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => window.open('https://drive.google.com/file/d/SMAK_BOOKLET_ID/view', '_blank')}
+                  className="w-full bg-gradient-to-r from-[#F4C261] to-[#FFD700] text-[#001F54] py-4 rounded-xl font-bold text-lg hover:from-[#FFD700] hover:to-[#F4C261] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group-hover:shadow-2xl"
+                >
+                  Download Booklet
+                </button>
+              </div>
+            </div>
+
+            {/* General Booklet */}
+            <div className="group bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-4 hover:scale-105 overflow-hidden border border-gray-100">
+              <div className="bg-gradient-to-br from-[#E6B85C] to-[#D4A54A] p-8 text-center relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#001F54]/20 rounded-full"></div>
+                <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-[#F4C261]/20 rounded-full"></div>
+                <div className="relative z-10">
+                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <svg className="w-8 h-8 text-[#E6B85C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-2xl font-black text-white mb-2">General</h3>
+                  <p className="text-white/80 text-sm">For Non-Binusian and Non-SMA/K</p>
+                </div>
+              </div>
+              <div className="p-8">
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#E6B85C] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Open to all participants
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#E6B85C] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Universal competition rules
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#E6B85C] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Public category access
+                  </li>
+                  <li className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 text-[#E6B85C] mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Community guidelines
+                  </li>
+                </ul>
+                <button 
+                  onClick={() => window.open('https://drive.google.com/file/d/GENERAL_BOOKLET_ID/view', '_blank')}
+                  className="w-full bg-gradient-to-r from-[#E6B85C] to-[#D4A54A] text-white py-4 rounded-xl font-bold text-lg hover:from-[#D4A54A] hover:to-[#E6B85C] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group-hover:shadow-2xl"
+                >
+                  Download Booklet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Main Content Rectangle Container */}
-      <div className={`container mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 transition-all duration-1000 delay-400 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+      <div className={`container mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 transition-all duration-1000 delay-800 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Category Filter Section */}
           <div className="py-8 sm:py-10 md:py-12 px-6 sm:px-8 md:px-12">
