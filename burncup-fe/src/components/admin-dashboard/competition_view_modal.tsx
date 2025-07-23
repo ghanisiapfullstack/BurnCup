@@ -2,6 +2,7 @@
 
 import { X, Trophy, FileText, CheckCircle, MapPin, Calendar, Users, DollarSign} from "lucide-react"
 import type { Competition } from "@/model/competition_model"
+import Image from "next/image"
 
 interface CompetitionViewModalProps {
   isOpen: boolean
@@ -47,15 +48,11 @@ export function CompetitionViewModal({ isOpen, onClose, competition }: Competiti
           {/* Competition Image */}
           {competition.imageUrl && (
             <div className="mb-6">
-              {/* <ImageIcon
+              <Image
                 src={competition.imageUrl || "/placeholder.svg"}
                 alt={competition.name}
                 className="w-full h-48 object-cover rounded-lg border border-gray-200"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement
-                  target.style.display = "none"
-                }}
-              /> */}
+              />
             </div>
           )}
 

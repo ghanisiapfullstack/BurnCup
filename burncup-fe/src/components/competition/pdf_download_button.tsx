@@ -1,16 +1,29 @@
 "use client";
 
 export default function PdfDownloadButton({
-    competitionId,
+    bookletLink,
     competitionName,
 }: {
-    competitionId: string;
+    bookletLink: string;
     competitionName: string;
 }) {
     const handleDownload = () => {
+        // Convert Google Drive view link to direct download link
+        let downloadUrl = bookletLink;
+        
+        if (bookletLink.includes('drive.google.com')) {
+            // Extract file ID from Google Drive URL
+            const fileIdMatch = bookletLink.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (fileIdMatch) {
+                const fileId = fileIdMatch[1];
+                downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            }
+        }
+
         const link = document.createElement('a');
-        link.href = `/pdfs/competition-booklet-${competitionId}.pdf`;
+        link.href = downloadUrl;
         link.download = `${competitionName}-Booklet.pdf`;
+        link.target = '_blank';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

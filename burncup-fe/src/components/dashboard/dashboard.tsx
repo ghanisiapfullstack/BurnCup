@@ -22,6 +22,7 @@ import {
   GraduationCap,
   School,
   Trash2,
+  Check
 } from "lucide-react"
 
 import { User as UserModel } from "@/model/user_model"
@@ -29,6 +30,7 @@ import { Team } from "@/model/team_model"
 import { fetchCurrentUser, updateCurrentUser } from "@/controller/user_controller"
 import { getCurrentSession, logout } from "@/lib/actions/actions"
 import { deleteTeamMember, fetchCurrentTeams, fetchTeamQrUrl } from "@/controller/team_controller"
+import { pingIsPaidTeamSlot } from "@/controller/competition_controller"
 import { Session } from "next-auth"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -113,12 +115,31 @@ const getCountdownColor = (timeLeft: number) => {
   }
 };
 
-function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: string; teamCode: string; isTeamLeader: boolean, isOpen: boolean }) {
-  const restartTime = 600;
+const getTeamLeftColor = (slotLeft: number) => {
+  if (slotLeft <= 3) {
+    // Last 10 seconds: warning red
+    return "bg-red-100 text-red-800";
+  } else if (slotLeft <= 8) {
+    // Last 1 minute: warning yellow
+    return "bg-yellow-100 text-yellow-800";
+  } else {
+    // Default: blue
+    return "bg-blue-100 text-blue-800";
+  }
+};
+
+function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; isOpen: boolean; competition: Team; user: UserModel | null }) {
   const [copied, setCopied] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [timeLeft, setTimeLeft] = useState(restartTime);
+  const [timeLeft, setTimeLeft] = useState(0);
   const [qrLink, setQrLink] = useState<string | null>(null);
+  const [teamSlot, setTeamSlot] = useState<number>(0);
+
+  const isTeamLeader = competition.teamLeader.email == user?.email;
+  const [isPaid, setIsPaid] = useState<boolean>(competition.isPaid);
+  const teamCode = competition.teamCode;
+  const isLackingTeamMembers = competition.members.length + 1 < (competition.competition.minMembers || 1);
+
 
   const {showError} = useToast();
 
@@ -128,61 +149,74 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const refreshCode = async () => {
-    setIsLoading(true);
-    try {
-      const token = await (await fetch("/api/token")).json();
-      const qrRes = await fetchTeamQrUrl(teamCode, token.token);
-      setQrLink(qrRes.qrLink);
+  const checkTeamStatus = async () => {
+      try {
+        const res = await pingIsPaidTeamSlot(competition.id)
+        setIsPaid(res.isPaid)
+        setTeamSlot(res.remainingSlots)
+        
+        if (res.isPaid || res.remainingSlots <= 0) {
+          setQrLink(null)
+          setTimeLeft(0)
+          return
+        }
 
-      // Get current time
-      const now = new Date();
-      
-      const expiryTimeString = qrRes.expiryTime;
-
-      const expiryTime = new Date(expiryTimeString);
-      
-      // Calculate difference in milliseconds
-      const diffInMs = expiryTime.getTime() - now.getTime();
-      const diffInSeconds = Math.max(0, Math.floor(diffInMs / 1000));
-      
-      
-      setTimeLeft(diffInSeconds);
-    } catch (error: any) {
-      if (error.response) {
-        const errorMessage = error.response.data.error;
-        showError("Failed to fetch qr link", errorMessage);
-      } else if (error.request) {
-        console.error("Failed to fetch qr link: No response received", error.request);
-      } else {
-        console.error("Failed to fetch qr link:", error.message);
+        if (timeLeft <= 0 || teamSlot === 0) {
+          await refreshQrCode()
+        }
+      } catch (error: any) {
+        handleError("Failed to check team slot", error)
       }
-      setQrLink(null);
     }
-    setIsLoading(false)
-  }
-  
-  useEffect(() => {
-    if (!isOpen) {
+
+    const refreshQrCode = async () => {
       setIsLoading(true)
-      return;
+      try {
+        const token = await (await fetch("/api/token")).json()
+        const qrRes = await fetchTeamQrUrl(teamCode, token.token)
+        setQrLink(qrRes.qrLink)
+        
+        const diffInMs = new Date(qrRes.expiryTime).getTime() - new Date().getTime()
+        setTimeLeft(Math.max(0, Math.floor(diffInMs / 1000)))
+      } catch (error: any) {
+        handleError("Failed to fetch qr link", error)
+        setQrLink(null)
+      }
+      setIsLoading(false)
     }
-    refreshCode();
-  }, [isOpen])
+
+    const handleError = (message: string, error: any) => {
+      const errorMessage = error.response?.data?.error || error.message
+      showError(message, errorMessage)
+    }
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-    if (timeLeft <= 0) {
-      refreshCode();
-      return;
-    }
+    if (!isOpen || isPaid || !isTeamLeader || timeLeft <= 0 || isLackingTeamMembers) return
+
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [timeLeft, isOpen]);
+      setTimeLeft(prev => {
+        const newTime = prev - 1
+        // Refresh every 15 seconds or when timer expires
+        if (newTime % 15 === 0 || newTime <= 0) {
+          checkTeamStatus()
+        }
+        return newTime
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [timeLeft, isOpen, isPaid, isTeamLeader])
+
+  useEffect(() => {
+    if (!isOpen || isPaid || !isTeamLeader) {
+      setIsLoading(!isTeamLeader)
+      setTimeLeft(0)
+      setQrLink(null)
+      return
+    }
+
+    checkTeamStatus()
+  }, [isOpen])
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
@@ -191,13 +225,41 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
   const formattedSeconds = String(seconds).padStart(2, "0");
 
   const countdownColor = getCountdownColor(timeLeft);
+  const teamLeftColor = getTeamLeftColor(teamSlot);
 
   const qrCodeLoading: ReactNode = (
     <div>
       <QrCode className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-2" />
-      <p className="text-sm text-gray-500">{isTeamLeader ? 'Loading....' : 'Waiting...'}</p>
-      <p className="text-xs text-gray-400">{isTeamLeader ? 'Getting your QR Code': 'Waiting for your team leader...'}</p>
+      <p className="text-sm text-gray-500">{isLackingTeamMembers ? 'Cannot Display QR' : isTeamLeader ? 'Loading....' : 'Waiting...'}</p>
+      <p className="text-xs text-gray-400">{isLackingTeamMembers ? `Needs ${competition.competition.minMembers || 1} members` : isTeamLeader ? 'Getting your QR Code': 'Waiting for your team leader'}</p>
     </div>
+  )
+
+  const isPaidQrCode: ReactNode = (
+    <div className="text-center">
+      <Check className="w-12 h-12 md:w-16 md:h-16 text-green-600 mx-auto mb-2" />
+      <p className="text-sm text-green-600 mb-2">Payment Completed</p>
+      <p className="text-xs text-gray-500">{competition.competition.paidMessage}</p>
+    </div>
+  )
+
+  const teamSlotFullQrCode: ReactNode = (
+    <div className="text-center">
+      <X className="w-12 h-12 md:w-16 md:h-16 text-red-600 mx-auto mb-2" />
+      <p className="text-sm text-red-600 mb-2">Team Slot Full</p>
+      <p className="text-xs text-gray-500">No more slots available for this competition.</p>
+    </div>
+  )
+
+  const qrCodeObject: ReactNode = (
+    isLoading || qrLink == null ? qrCodeLoading : 
+    <Image
+      src={qrLink}
+      alt="QR Code"
+      width={300}
+      height={300}
+      className='object-contain'
+    />
   )
 
   if (!isOpen) {
@@ -215,16 +277,15 @@ function QRCodePayment({ amount, teamCode, isTeamLeader, isOpen }: { amount: str
       <div className="flex justify-center mb-4">
         <div className="w-32 h-32 md:w-48 md:h-48 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
           <div className="text-center">
-            {isLoading || qrLink == null ? qrCodeLoading : 
-            <Image
-              src={qrLink}
-              alt="QR Code"
-              width={300}
-              height={300}
-              className='object-contain'
-            />}
+            {isPaid ? isPaidQrCode : teamSlot <= 0 ? teamSlotFullQrCode : qrCodeObject}
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-center space-x-2 mb-3">
+        <span className={`${teamLeftColor} px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base`}>
+          {teamSlot} slot{teamSlot > 1 ? 's' : ''} left
+        </span>
       </div>
 
       <div className="flex items-center justify-center space-x-2 mb-3">
@@ -287,7 +348,7 @@ function TeamMemberCard({
           <p className="text-xs text-gray-600 mb-1">{member.email}</p>
           <p className="text-xs text-gray-600 mb-2">{member.phoneNumber}</p>
 
-          {member.binusian == true ? (
+          {member.userType == "Binusian" ? (
             <div className="space-y-1">
               <p className="text-xs text-gray-600">
                 <span className="font-medium">NIM:</span> {member.nim}
@@ -296,10 +357,12 @@ function TeamMemberCard({
                 <span className="font-medium">Major:</span> {member.major}
               </p>
             </div>
-          ) : (
+          ) : member.userType == "SMA/SMK" ? (
             <p className="text-xs text-gray-600">
               <span className="font-medium">School:</span> {member.school}
             </p>
+          ) : (
+            <div></div>
           )}
         </div>
       </div>
@@ -369,13 +432,14 @@ function EditProfileModal({
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-900">User Type</label>
             <select
-              value={formData.binusian ? "binusian" : "non-binusian"}
-              onChange={(e) => handleInputChange("binusian", e.target.value == "binusian")}
+              value={formData.userType}
+              onChange={(e) => handleInputChange("userType", e.target.value)}
               disabled = {user != emptyUser}
               className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent bg-gradient-to-r from-[#001F54]/10 to-[#003875]/10 text-sm md:text-base"
             >
-              <option value="binusian">Binusian</option>
-              <option value="non-binusian">Non Binusian</option>
+              <option value="Binusian">Binusian</option>
+              <option value="SMA/SMK">SMA/SMK</option>
+              <option value="Others">Others</option>
             </select>
           </div>
 
@@ -411,7 +475,7 @@ function EditProfileModal({
             </div>
 
             {/* Conditional Fields */}
-            {formData.binusian === true ? (
+            {formData.userType == "Binusian" ? (
               <>
                 <div className="space-y-2">
                   <label htmlFor="nim" className="block text-sm font-medium text-gray-700">
@@ -440,7 +504,7 @@ function EditProfileModal({
                   />
                 </div>
               </>
-            ) : (
+            ) : formData.userType == "SMA/SMK" ? (
               <div className="space-y-2 md:col-span-2">
                 <label htmlFor="school" className="block text-sm font-medium text-gray-700">
                   School
@@ -454,6 +518,8 @@ function EditProfileModal({
                   className="w-full px-3 py-2 border-2 border-[#003875] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#001F54] focus:border-transparent text-sm md:text-base"
                 />
               </div>
+            ) : (
+              <div></div>
             )}
           </div>
 
@@ -531,7 +597,7 @@ export const emptyUser: UserModel = {
   fullName: "-",
   email: "-",
   phoneNumber: "-",
-  binusian: false,
+  userType: "Binusian",
   nim: "-",
   major: "-",
   school: "-",
@@ -763,10 +829,10 @@ export function Dashboard() {
                 <div className="flex items-center space-x-2 mt-1">
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
-                      user?.binusian === true ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white" : "bg-green-100 text-green-800"
+                      "bg-gradient-to-r from-[#001F54] to-[#003875] text-white"
                     }`}
                   >
-                    {user?.binusian === true ? "Binusian" : "Non-Binusian"}
+                    {user?.userType}
                   </span>
                   <span className="text-xs text-gray-500">{competitions?.length} Competitions</span>
                 </div>
@@ -799,10 +865,10 @@ export function Dashboard() {
                 <p className="text-sm text-gray-600 mb-2">{session?.user?.email}</p>
                 <span
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                    user?.binusian === true ? "bg-gradient-to-r from-[#001F54] to-[#003875] text-white" : "bg-green-100 text-green-800"
+                    "bg-gradient-to-r from-[#001F54] to-[#003875] text-white"
                   }`}
                 >
-                  {user?.binusian === true ? "Binusian" : "Non-Binusian"}
+                  {user?.userType}
                 </span>
               </div>
 
@@ -812,7 +878,7 @@ export function Dashboard() {
                   <span className="text-sm text-gray-600">{user?.phoneNumber}</span>
                 </div>
 
-                {user?.binusian === true ? (
+                {user?.userType == "Binusian" ? (
                   <>
                     <div className="flex items-center space-x-3">
                       <GraduationCap className="w-4 h-4 text-gray-400" />
@@ -823,11 +889,13 @@ export function Dashboard() {
                       <span className="text-sm text-gray-600">{user.major}</span>
                     </div>
                   </>
-                ) : (
+                ) : user?.userType == "SMA/SMK" ? (
                   <div className="flex items-center space-x-3">
                     <School className="w-4 h-4 text-gray-400" />
                     <span className="text-sm text-gray-600">{user?.school}</span>
                   </div>
+                ) : (
+                  <div></div>
                 )}
 
                 <div className="flex items-center space-x-3">
@@ -987,7 +1055,7 @@ export function Dashboard() {
 
                             {/* Payment QR Code */}
                             <div className="order-last lg:order-none">
-                              <QRCodePayment amount={competition.competition.registrationfee.toString()} teamCode={competition.teamCode} isTeamLeader={competition.teamLeader.email == user?.email} isOpen={expandedCompetitions.has(competition.id)} />
+                              <QRCodePayment amount={competition.competition.registrationfee.toString()} isOpen={expandedCompetitions.has(competition.id)} competition={competition} user={user} />
                             </div>
 
                             {/* Team Information */}

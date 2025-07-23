@@ -282,7 +282,7 @@ export default function Home() {
                 COMPETE, EXPLORE, CONQUER
               </h2>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 leading-relaxed animate-in slide-in-from-right-8 fade-in duration-1000 delay-500 max-w-xl lg:max-w-none">
-                The biggest internal competition event at Binus University Bekasi. Join us and showcase your talents!
+                The biggest internal competition event at BINUS @Bekasi. Join us and showcase your talents!
               </p>
               
               {/* CTA Buttons */}
@@ -330,10 +330,10 @@ export default function Home() {
               
               <div className="space-y-4 sm:space-y-6">
                 <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Burncup is an annual competition hosted by Binus University Bekasi. To this day, the event continues to be a platform for Binus Bekasi university students and high school/vocational school students from the Greater Jakarta area to showcase their talents, build friendships, and compete for the rotating trophy.
+                  BurnCup is an annual competition hosted by BINUS @Bekasi. To this day, the event continues to be a platform for BINUS @Bekasi students and high school/vocational school students from the Greater Jakarta area to showcase their talents, build friendships, and compete for the rotating trophy.
                 </p>
                 <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Burncup 2025 comes with a new concept and theme: "The Global Odyssey." In the context of this event, "The Global Odyssey" symbolizes a challenging journey for participants in their quest for the championship title. This year's Burncup slogan is "Compete, Explore, Conquer."
+                  BurnCup 2025 comes with a new concept and theme: "The Global Odyssey." In the context of this event, "The Global Odyssey" symbolizes a challenging journey for participants in their quest for the championship title. This year's BurnCup slogan is "Compete, Explore, Conquer."
                 </p>
               </div>
 
@@ -354,7 +354,7 @@ export default function Home() {
             {/* Mascot Image */}
             <div className="flex-1 animate-in slide-in-from-right-8 fade-in duration-1000 order-1 lg:order-2">
               <div className="relative group max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto">
-                <div className="absolute -inset-4 sm:-inset-6 md:-inset-8 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-75"></div>
+                <div className="absolute -inset-4 sm:-inset-6 md:-inset-8 bg-gradient-to-r from-[#F4C261] to-[#FFD700] rounded-full blur-3xl opacity-30 animate-pulse"></div>
                 <Image
                   src="/images/burncup_mascot.png"
                   alt="About Burncup"

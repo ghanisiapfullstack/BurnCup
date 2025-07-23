@@ -1,5 +1,5 @@
 export interface User {
-    binusian: boolean;
+    userType: string;
     fullName: string;
     email: string;
     phoneNumber: string;

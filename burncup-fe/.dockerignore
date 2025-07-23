@@ -1,0 +1,4 @@
+# burncup-fe/.dockerignore
+
+.env.local
+.env.*       # Optional: exclude all env files unless needed

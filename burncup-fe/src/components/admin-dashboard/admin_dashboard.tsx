@@ -22,6 +22,7 @@ import {
   Save,
   MapPin,
   DollarSign,
+  Copy
 } from "lucide-react"
 import { useToast } from "@/components/common/toast/toast-context"
 import { CompetitionViewModal } from "./competition_view_modal"
@@ -31,7 +32,7 @@ import { CompetitionStats, type Competition } from "@/model/competition_model"
 import type { Team } from "@/model/team_model"
 import { CompetitionCarousel } from "./competition_carousel"
 import { AdminBasicInfoResponse } from "@/model/admin_model"
-import { addCompetition, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams, updateCompetition} from "@/controller/admin_controller"
+import { addCompetition, deleteCompetition, deleteTeam, fetchAdminBasicInfo, fetchAdminCompetitionStats, fetchAllTeams, updateCompetition} from "@/controller/admin_controller"
 import { fetchCompetitions } from "@/controller/competition_controller"
 
 interface AddCompetitionModalProps {
@@ -53,7 +54,7 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
     registrationEndDate: "",
     competitionStartDate: "",
     competitionEndDate: "",
-    competitionType: "Mixed",
+    competitionType: "Public",
     venue: "",
     registrationfee: 0,
     prizes: [{ name: "", description: "" }],
@@ -103,7 +104,7 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
         registrationEndDate: "",
         competitionStartDate: "",
         competitionEndDate: "",
-        competitionType: "Mixed",
+        competitionType: "Public",
         venue: "",
         registrationfee: 0,
         prizes: [{ name: "", description: "" }],
@@ -264,8 +265,9 @@ function AddCompetitionModal({ isOpen, onClose, onSave, editingCompetition }: Ad
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="Binusian">Binusian</option>
-                  <option value="NonBinusian">Non-Binusian</option>
-                  <option value="Mixed">Mixed</option>
+                  <option value="SMA/SMK">SMA/SMK</option>
+                  <option value="SMA/SMK And Others (Non-Binusian)">SMA/SMK And Others (Non-Binusian)</option>
+                  <option value="Public">Public</option>
                 </select>
               </div>
 
@@ -700,9 +702,23 @@ export function AdminDashboard() {
     setCurrentPage(1)
   }, [searchTerm, filterCategory, filterPaymentStatus])
 
+  // Add this function inside the AdminDashboard component, after handleDeleteCompetition
+  const handleDuplicateCompetition = (competition: Competition) => {
+    const duplicatedCompetition: Competition = {
+      ...competition,
+      id: `Duplicate Competition`, // Generate new ID
+      name: `${competition.name} (Copy)`, // Add "(Copy)" to the name
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+    
+    setEditingCompetition(duplicatedCompetition)
+    setIsAddCompetitionOpen(true)
+  }
+
   // Competition handlers
   const handleAddCompetition = async (competitionData: Competition) => {
-    if (editingCompetition) {
+    if (editingCompetition && competitionData.id != "Duplicate Competition") {
       try {
         const token = await (await fetch("/api/token")).json();
         const updateCompRes = await updateCompetition(token.token, competitionData, competitionData.id);
@@ -748,11 +764,27 @@ export function AdminDashboard() {
     setIsAddCompetitionOpen(true)
   }
 
-  const handleDeleteCompetition = (competitionId: string) => {
+  const handleDeleteCompetition = async (competitionId: string) => {
     if (confirm("Are you sure you want to delete this competition? This action cannot be undone.")) {
       const competition = competitions.find((c) => c.id === competitionId)
-      setCompetitions((prev) => prev.filter((comp) => comp.id !== competitionId))
-      showSuccess("Competition Deleted", `${competition?.name} has been deleted successfully.`)
+
+      try {
+        const token = await (await fetch("/api/token")).json();
+        const deleteCompetitionRes = await deleteCompetition(token.token, competitionId);
+        if (deleteCompetitionRes) {
+          setCompetitions((prev) => prev.filter((comp) => comp.id !== competitionId))
+          showSuccess("Competition Deleted", `${competition?.name} has been deleted successfully.`)
+        }
+      } catch (error: any) {
+        if (error.response) {
+          const errorMessage = error.response.data.error;
+          showError("Failed to add competition", errorMessage);
+        } else if (error.request) {
+          console.error("Failed to add competition: No response received", error.request);
+        } else {
+          console.error("Failed to add competition:", error.message);
+        }
+      }
     }
   }
 
@@ -767,11 +799,27 @@ export function AdminDashboard() {
     setIsTeamViewModalOpen(true)
   }
 
-  const handleDeleteTeam = (teamId: string) => {
+  const handleDeleteTeam = async (teamId: string) => {
     if (confirm("Are you sure you want to delete this team? This action cannot be undone.")) {
       const team = allTeams.find((t) => t.id === teamId)
-      // In a real app, this would delete the team from the database
-      showSuccess("Team Deleted", `${team?.teamName} has been deleted successfully.`)
+
+      try {
+        const token = await (await fetch("/api/token")).json();
+        const deleteTeamRes = await deleteTeam(token.token, team?.teamCode || "");
+        if (deleteTeamRes) {
+          setAllTeams((prev) => prev.filter((t) => t.id !== teamId))
+          showSuccess("Team Deleted", `${team?.teamName} has been deleted successfully.`)
+        }
+      } catch (error: any) {
+        if (error.response) {
+          const errorMessage = error.response.data.error;
+          showError("Failed to add competition", errorMessage);
+        } else if (error.request) {
+          console.error("Failed to add competition: No response received", error.request);
+        } else {
+          console.error("Failed to add competition:", error.message);
+        }
+      }
     }
   }
 
@@ -964,6 +1012,13 @@ export function AdminDashboard() {
                       <Eye className="w-4 h-4" />
                     </button>
                     <button
+                      onClick={() => handleDuplicateCompetition(competition)}
+                      className="text-green-600 hover:text-green-700 p-1 rounded hover:bg-green-50"
+                      title="Duplicate Competition"
+                    >
+                      <Copy className="w-4 h-4" />
+                    </button>
+                    <button
                       onClick={() => handleEditCompetition(competition)}
                       className="text-gray-600 hover:text-gray-700 p-1 rounded hover:bg-gray-50"
                       title="Edit Competition"
@@ -1069,7 +1124,7 @@ export function AdminDashboard() {
                       <div>
                         <div className="text-sm font-medium text-gray-900">{team.teamLeader.fullName}</div>
                         <div className="text-sm text-gray-500">
-                          {team.teamLeader.binusian ? team.teamLeader.nim : "Non-Binusian"}
+                          {team.teamLeader.userType}
                         </div>
                       </div>
                     </div>

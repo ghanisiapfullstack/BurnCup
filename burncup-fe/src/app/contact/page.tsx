@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 const contactData = [
   {
@@ -217,7 +218,7 @@ export default function ContactPage() {
             <div className="flex justify-center items-center">
               <div className="relative group">
                 <div className="absolute rounded-full opacity-20 blur-xl group-hover:opacity-30 transition-opacity duration-500"></div>
-                <img
+                <Image
                   src="/images/burncup_logo.png"
                   alt="BurnCup Logo"
                   className="relative w-full max-w-sm lg:max-w-md h-auto object-contain group-hover:scale-105 transition-transform duration-500"

@@ -129,3 +129,39 @@ export async function updateCompetition(token: string, competition: Competition,
     throw err;
   }
 }
+
+export async function deleteTeam(token: string, teamCode: string): Promise<any> {
+  try {
+    const res = await axiosInstance.delete(
+      `admin-delete-team/${teamCode}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting team:", err);
+    throw err;
+  }
+}
+
+export async function deleteCompetition(token: string, competitionId: string): Promise<any> {
+  try {
+    const res = await axiosInstance.delete(
+      `admin-delete-competition/${competitionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting competition:", err);
+    throw err;
+  }
+}

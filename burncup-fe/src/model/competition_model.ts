@@ -10,7 +10,7 @@ export interface Competition {
     registrationEndDate: string;
     competitionStartDate: string;
     competitionEndDate: string;
-    competitionType: string; // e.g., "Binusian", "NonBinusian", "Mixed"
+    competitionType: string; // e.g., "Binusian", "SMA/SMK", "Public"
     venue: string;
     registrationfee: number;
     prizes: Prize[];

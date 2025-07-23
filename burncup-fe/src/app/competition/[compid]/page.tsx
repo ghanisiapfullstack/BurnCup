@@ -173,7 +173,7 @@ export default async function CompetitionDetailPage({
                                 Download the complete competition guide with detailed rules, schedules, and requirements.
                             </p>
                             <PdfDownloadButton 
-                                competitionId={competition.id}
+                                bookletLink={competition.bookletUrl}
                                 competitionName={competition.name}
                             />
                         </div>

@@ -20,7 +20,7 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
   const [accountUsername, setAccountUsername] = useState("")
   const [hasUserProfile, setHasUserProfile] = useState(false)
   const [formData, setFormData] = useState({
-    userType: "binusian", // "binusian" or "non-binusian"
+    userType: "Binusian", // "Binusian" or "SMA/SMK" or "Others"
     fullName: "",
     nim: "",
     major: "",
@@ -45,7 +45,7 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
           const userProfile = await fetchCurrentUser(token.token);
           setHasUserProfile(!!userProfile)
           setFormData({
-            userType: userProfile.binusian ? "binusian" : "non-binusian",
+            userType: userProfile.userType,
             fullName: userProfile.fullName || "",
             nim: userProfile.nim || "",
             major: userProfile.major || "",
@@ -87,13 +87,13 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
     try {
       const token = await (await fetch("/api/token")).json();
       const userProfile = {
-        binusian: formData.userType === "binusian",
+        userType: formData.userType,
         fullName: formData.fullName,
         phoneNumber: formData.phone,
         email: accountEmail,
-        nim: formData.userType === "binusian" ? formData.nim : null,
-        major: formData.userType === "binusian" ? formData.major : null,
-        school: formData.userType === "non-binusian" ? formData.school : null,
+        nim: formData.userType === "Binusian" ? formData.nim : null,
+        major: formData.userType === "Binusian" ? formData.major : null,
+        school: formData.userType === "SMA/SMK" ? formData.school : null,
       };
       await updateCurrentUser(token.token, userProfile);
       setIsLoading(false)
@@ -189,8 +189,9 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                   onChange={(e) => handleInputChange("userType", e.target.value)}
                   className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-blue-50"
                 >
-                  <option value="binusian">Binusian</option>
-                  <option value="non-binusian">Non Binusian</option>
+                  <option value="Binusian">Binusian</option>
+                  <option value="SMA/SMK">SMA/SMK</option>
+                  <option value="Others">Others</option>
                 </select>
               </div>
 
@@ -216,7 +217,7 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                   </div>
 
                   {/* NIM (Binusian) or School (Non-Binusian) */}
-                  {formData.userType === "binusian" ? (
+                  {formData.userType === "Binusian" ? (
                     <div className="space-y-2">
                       <label htmlFor="nim" className="block text-sm font-medium text-gray-700">
                         NIM
@@ -231,7 +232,7 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                         className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
-                  ) : (
+                  ) : formData.userType === "SMA/SMK" ? (
                     <div className="space-y-2">
                       <label htmlFor="school" className="block text-sm font-medium text-gray-700">
                         School(Non Binusian)
@@ -246,12 +247,14 @@ export function ProfileStep({ onComplete, isCompleted }: ProfileStepProps) {
                         className="disabled:opacity-50 disabled:cursor-not-allowed w-full px-3 py-2 border-2 border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
+                  ) : (
+                    <div></div>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   {/* Major (Binusian only) */}
-                  {formData.userType === "binusian" && (
+                  {formData.userType === "Binusian" && (
                     <div className="space-y-2">
                       <label htmlFor="major" className="block text-sm font-medium text-gray-700">
                         Major(Binusian)

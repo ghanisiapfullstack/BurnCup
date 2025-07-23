@@ -27,3 +27,23 @@ export async function fetchCompetitionByID(id: string): Promise<Competition> {
     throw err;
   }
 }
+
+export async function fetchRemainingTeamSlot(competitionId: string): Promise<{ remainingSlots: number }> {
+  try {
+    const res = await axiosInstance.get<{ remainingSlots: number }>(`get-remaining-team-slot/${competitionId}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching remaining team slots:", err);
+    throw err;
+  }
+}
+
+export async function pingIsPaidTeamSlot(teamId: string): Promise<{ isPaid: boolean; remainingSlots: number }> {
+  try {
+    const res = await axiosInstance.get<{ isPaid: boolean; remainingSlots: number }>(`ping-is-paid-team-slot/${teamId}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error checking if team slot is paid:", err);
+    throw err;
+  }
+}
