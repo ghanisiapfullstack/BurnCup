@@ -208,6 +208,177 @@ function EventTimeline() {
   )
 }
 
+function RegistrationTutorial() {
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  return (
+    <section className="py-12 sm:py-16 md:py-20 lg:py-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-blue-900 font-black mb-4 sm:mb-6 animate-in slide-in-from-bottom-4 fade-in duration-1000">
+            Registration Tutorial
+          </h2>
+          <div className="w-16 sm:w-20 md:w-24 h-1 bg-[#E6B85C] mx-auto rounded-full animate-in slide-in-from-bottom-4 fade-in duration-1000 delay-200"></div>
+          <p className="text-base sm:text-lg md:text-xl mt-4 sm:mt-6 max-w-3xl mx-auto animate-in slide-in-from-bottom-4 fade-in duration-1000 delay-400">
+            Learn how to register for BurnCup 2025 with our step-by-step video guide
+          </p>
+        </div>
+
+        <div className="relative group animate-in slide-in-from-bottom-4 fade-in duration-1000 delay-600">
+          {/* Video container with modern styling */}
+          <div className="relative bg-black rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 group-hover:scale-[1.02]">
+            {/* Animated border */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#E6B85C] via-yellow-400 to-[#E6B85C] p-0.5 sm:p-1 rounded-2xl sm:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="bg-black rounded-2xl sm:rounded-3xl h-full w-full"></div>
+            </div>
+            
+            {/* Video wrapper */}
+            <div className="relative aspect-video bg-gray-900 rounded-2xl sm:rounded-3xl overflow-hidden">
+              {/* Loading placeholder */}
+              {/* {!isVideoLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                  <div className="text-center space-y-4">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-[#E6B85C] rounded-full flex items-center justify-center animate-pulse">
+                      <svg className="w-8 h-8 sm:w-10 sm:h-10 text-blue-900" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                    <div className="w-32 h-4 bg-gray-700 rounded-full mx-auto animate-pulse"></div>
+                    <p className="text-gray-400 text-sm">Loading tutorial video...</p>
+                  </div>
+                </div>
+              )} */}
+
+              {/* Video element - replace with your actual video source */}
+              <video
+                className="w-full h-full object-cover"
+                controls
+                poster="/images/video-thumbnail.jpg" // Add your video thumbnail
+                onLoadedData={() => setIsVideoLoaded(true)}
+                preload="metadata"
+              >
+                <source src="/videos/registration-tutorial.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Custom play button overlay (optional) */}
+              <div className="absolute inset-0 bg-black/20 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#E6B85C]/90 rounded-full flex items-center justify-center backdrop-blur-sm">
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-blue-900 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating elements around video */}
+          <div className="absolute -top-4 -left-4 w-8 h-8 bg-[#E6B85C] rounded-full opacity-60 group-hover:animate-bounce"></div>
+          <div className="absolute -top-2 -right-6 w-6 h-6 bg-yellow-400 rounded-full opacity-40 group-hover:animate-pulse"></div>
+          <div className="absolute -bottom-3 -left-6 w-4 h-4 bg-[#E6B85C] rounded-full opacity-50 group-hover:animate-ping"></div>
+          <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-gradient-to-r from-[#E6B85C] to-yellow-400 rounded-full opacity-30 group-hover:animate-spin"></div>
+        </div>
+
+        {/* Additional info cards below video */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mt-8 sm:mt-12">
+          {[
+            {
+              step: "1",
+              title: "Create Account",
+              description: "Sign up with your email and create your profile",
+              gradient: "from-yellow-400 to-orange-400",
+              hoverGradient: "group-hover:from-yellow-500 group-hover:to-orange-500",
+              icon: (
+          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+          </svg>
+              ),
+            },
+            {
+              step: "2",
+              title: "Choose Category",
+              description: "Select your preferred competition category",
+              gradient: "from-blue-400 to-purple-500",
+              hoverGradient: "group-hover:from-blue-500 group-hover:to-purple-600",
+              icon: (
+          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l4 8h-8l4-8zm0 20c-4.4 0-8-3.6-8-8 0-2.2 1.8-4 4-4h8c2.2 0 4 1.8 4 4 0 4.4-3.6 8-8 8z"/>
+          </svg>
+              ),
+            },
+            {
+              step: "3",
+              title: "Submit & Pay",
+              description: "Complete registration and payment process",
+              gradient: "from-pink-400 to-red-400",
+              hoverGradient: "group-hover:from-pink-500 group-hover:to-red-500",
+              icon: (
+          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17 9V7a5 5 0 00-10 0v2a2 2 0 00-2 2v7a2 2 0 002 2h12a2 2 0 002-2v-7a2 2 0 00-2-2zm-8-2a3 3 0 016 0v2H9V7zm10 11H5v-7h14v7z"/>
+          </svg>
+              ),
+            },
+            {
+              step: "4",
+              title: "Get Confirmation",
+              description: "Receive confirmation and start your journey!",
+              gradient: "from-green-400 to-teal-400",
+              hoverGradient: "group-hover:from-green-500 group-hover:to-teal-500",
+              icon: (
+          <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9 16.2l-3.5-3.5 1.4-1.4L9 13.4l7.1-7.1 1.4 1.4z"/>
+          </svg>
+              ),
+            },
+          ].map((step, idx) => (
+            <div
+              key={step.step}
+              className={`group relative bg-gradient-to-br ${step.gradient} ${step.hoverGradient} rounded-2xl shadow-xl hover:shadow-2xl p-6 sm:p-8 text-center transform transition-all duration-500 hover:scale-105 cursor-pointer overflow-hidden animate-in slide-in-from-bottom-4 fade-in h-full flex flex-col`}
+              style={{ animationDelay: `${800 + idx * 200}ms`, animationDuration: '800ms' }}
+            >
+              {/* Animated background pattern */}
+              <div className="absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500">
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rotate-45 transform translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
+              </div>
+              {/* Floating particles on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+          {[...Array(2)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-white rounded-full animate-bounce"
+              style={{
+                left: `${30 + i * 40}%`,
+                top: `${30 + i * 30}%`,
+                animationDelay: `${i * 0.3}s`,
+                animationDuration: '2s'
+              }}
+            />
+          ))}
+              </div>
+              <div className="relative z-10 flex flex-col h-full">
+          <div className="flex justify-center mb-4 group-hover:animate-pulse">
+            <div className="p-3 bg-white/20 rounded-full backdrop-blur-sm group-hover:bg-white/30 transition-colors duration-300">
+              {step.icon}
+            </div>
+          </div>
+          <h4 className="text-lg sm:text-xl font-black text-white mb-2 group-hover:scale-105 transition-transform duration-300">
+            {step.title}
+          </h4>
+          <p className="text-white/90 text-sm mb-4 leading-relaxed group-hover:text-white transition-colors duration-300 flex-grow">
+            {step.description}
+          </p>
+          <span className="bg-white/20 text-white font-bold px-4 py-2 rounded-full transition-all duration-300 transform group-hover:scale-110 shadow-lg hover:shadow-xl border border-white/30 mt-auto inline-block w-12 mx-auto text-lg">
+            {step.step}
+          </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const router = useRouter();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
@@ -314,6 +485,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Registration Tutorial Section */}
+      <RegistrationTutorial />
 
       {/* Enhanced About Section */}
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-[#F2EDDA]">

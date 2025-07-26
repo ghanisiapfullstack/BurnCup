@@ -152,6 +152,7 @@ function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; 
   const checkTeamStatus = async () => {
       try {
         const res = await pingIsPaidTeamSlot(competition.id)
+
         setIsPaid(res.isPaid)
         setTeamSlot(res.remainingSlots)
         
@@ -161,8 +162,9 @@ function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; 
           return
         }
 
-        if (timeLeft <= 0 || teamSlot === 0) {
-          await refreshQrCode()
+        if (timeLeft <= 0) {
+          //await refreshQrCode()
+          setTimeLeft(900)
         }
       } catch (error: any) {
         handleError("Failed to check team slot", error)
@@ -230,8 +232,8 @@ function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; 
   const qrCodeLoading: ReactNode = (
     <div>
       <QrCode className="w-12 h-12 md:w-16 md:h-16 text-gray-400 mx-auto mb-2" />
-      <p className="text-sm text-gray-500">{isLackingTeamMembers ? 'Cannot Display QR' : isTeamLeader ? 'Loading....' : 'Waiting...'}</p>
-      <p className="text-xs text-gray-400">{isLackingTeamMembers ? `Needs ${competition.competition.minMembers || 1} members` : isTeamLeader ? 'Getting your QR Code': 'Waiting for your team leader'}</p>
+      <p className="text-sm text-gray-500">{isLackingTeamMembers ? 'Cannot Display QR' : isTeamLeader ? 'QR currently down' : 'Waiting...'}</p>
+      <p className="text-xs text-gray-400">{isLackingTeamMembers ? `Needs ${competition.competition.minMembers || 1} members` : isTeamLeader ? 'Sorry for the inconvenience': 'Waiting for your team leader'}</p>
     </div>
   )
 
@@ -293,6 +295,25 @@ function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; 
           {formattedMinutes}:{formattedSeconds}
         </span>
       </div>
+
+      {!isLackingTeamMembers && isTeamLeader ? <div>
+        <div className="flex items-center justify-center space-x-2 mb-3">
+          <span className={`bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base`}>
+            Transfer BLU BY BCA DIGITAL
+          </span>
+        </div>
+        <div className="flex items-center justify-center space-x-2 mb-3">
+          <span className={`bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base`}>
+            090181802992 A/N NADILA AZAHRA
+          </span>
+        </div>
+        <div className="flex items-center justify-center space-x-2 mb-3">
+          <span className={`bg-blue-100 text-blue-800 px-2 md:px-3 py-1 rounded-lg font-mono font-semibold text-sm md:text-base`}>
+            Contact whatsapp 087851327818 with your proof of payment and team name
+          </span>
+        </div>
+      </div> : <div></div>}
+
 
       <div className="text-center">
         <p className="text-sm text-gray-600 mb-2">Team Code for Reference:</p>

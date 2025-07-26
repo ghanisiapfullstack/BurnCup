@@ -1130,12 +1130,12 @@ export function AdminDashboard() {
                     </div>
                   </td>
                   <td className="px-4 py-4">
-                    <div className="text-sm text-gray-900">{team.members.length} members</div>
+                    <div className="text-sm text-gray-900">{team.members.length + 1} members</div>
                     <div className="w-16 bg-gray-200 rounded-full h-2 mt-1">
                       <div
                         className="bg-blue-600 h-2 rounded-full"
                         style={{
-                          width: `${Math.min((team.members.length / (team.competition.maxMembers || 8)) * 100, 100)}%`,
+                          width: `${Math.min(((team.members.length + 1) / (team.competition.maxMembers || 8)) * 100, 100)}%`,
                         }}
                       ></div>
                     </div>

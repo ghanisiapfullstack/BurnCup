@@ -94,13 +94,13 @@ export function TeamViewModal({ isOpen, onClose, team }: TeamViewModalProps) {
                   <div className="bg-white rounded-lg p-3 border">
                     <div className="text-sm text-gray-600">Team Size</div>
                     <div className="text-lg font-semibold text-gray-900">
-                      {team.members.length} / {team.competition.maxMembers} members
+                      {team.members.length + 1} / {team.competition.maxMembers} members
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                       <div
                         className="bg-blue-600 h-2 rounded-full"
                         style={{
-                          width: `${Math.min((team.members.length / (team.competition.maxMembers || 8)) * 100, 100)}%`,
+                          width: `${Math.min(((team.members.length + 1) / (team.competition.maxMembers || 8)) * 100, 100)}%`,
                         }}
                       ></div>
                     </div>

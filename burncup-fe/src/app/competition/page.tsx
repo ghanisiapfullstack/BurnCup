@@ -15,9 +15,18 @@ const categories = [
   "Automotive",
 ];
 
+const types = [
+  "All Types",
+  "Public",
+  "Binusian",
+  "SMA/SMK",
+  "SMA/SMK And Others (Non-Binusian)"
+]
+
 export default function CompetitionPage() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState<string>("All Categories");
+  const [selectedType, setSelectedType] = useState<string>("All Types");
 
   const [competitions, setCompetitions] = useState<Competition[]>([]);
   const [sortedCompetitions, setSortedCompetitions] = useState<Competition[]>([]);
@@ -40,25 +49,28 @@ export default function CompetitionPage() {
 
   useEffect(() => {
     if (competitions.length === 0) return;
-    console.log("Selected category changed:", selectedCategory);
-    
-    // Start transition animation
+
     setIsTransitioning(true);
-    
-    // Add a small delay for smooth transition
+
     setTimeout(() => {
-      if (selectedCategory === "All Categories") {
-        setSortedCompetitions(competitions);
-      } else {
-        const filteredCompetitions = competitions.filter(
+      let filtered = competitions;
+
+      if (selectedCategory !== "All Categories") {
+        filtered = filtered.filter(
           (competition) => competition.category === selectedCategory
         );
-        setSortedCompetitions(filteredCompetitions);
       }
-      // End transition animation
+
+      if (selectedType !== "All Types") {
+        filtered = filtered.filter(
+          (competition) => competition.competitionType === selectedType
+        );
+      }
+
+      setSortedCompetitions(filtered);
       setIsTransitioning(false);
     }, 200);
-  }, [selectedCategory, competitions])
+  }, [selectedCategory, selectedType, competitions]);
 
   return (
     <div className={`min-h-screen bg-[#F2EDDA] transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -282,6 +294,25 @@ export default function CompetitionPage() {
       <div className={`container mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-20 transition-all duration-1000 delay-800 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
         <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
           {/* Category Filter Section */}
+          <div className="pt-8 sm:pt-10 md:pt-12 px-6 sm:px-8 md:px-12">
+            <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 max-w-4xl mx-auto">
+              {types.map((type, index) => (
+                <div
+                  key={type}
+                  className="animate-in slide-in-from-bottom-4 fade-in"
+                  style={{ animationDelay: `${index * 100}ms`, animationDuration: '600ms' }}
+                >
+                  <CategoryBadgeButton
+                    category={type}
+                    clicked={selectedType === type}
+                    onClick={() => {
+                      setSelectedType(type);
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
           <div className="py-8 sm:py-10 md:py-12 px-6 sm:px-8 md:px-12">
             <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 max-w-4xl mx-auto">
               {categories.map((category, index) => (
