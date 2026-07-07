@@ -1,4 +1,10 @@
 # burncup-fe/.dockerignore
 
 .env.local
-.env.*       # Optional: exclude all env files unless needed
+.env.*
+node_modules
+.next
+.git
+.idea
+.vscode
+.DS_Store

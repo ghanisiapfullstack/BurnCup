@@ -1,17 +1,42 @@
 import type { Competition } from "@/model/competition_model";
 import axios from "axios";
 
-const baseURL = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api`;
+const publicBackendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+function getBackendBaseURL() {
+  if (typeof window === "undefined") {
+    return process.env.BACKEND_INTERNAL_URL ?? publicBackendBaseURL;
+  }
+
+  return publicBackendBaseURL;
+}
+
+function getCompetitionsURL() {
+  return `${getBackendBaseURL()}/api/competitions`;
+}
+
+const baseURL = `${publicBackendBaseURL}/api`;
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
     withCredentials: true, // Enable sending cookies and credentials for CORS
 });
 
+async function fetchCompetitionJson<T>(url: string): Promise<T> {
+  const response = await fetch(url, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return response.json() as Promise<T>;
+}
+
 export async function fetchCompetitions(): Promise<Competition[]> {
   try {
-    const res = await axiosInstance.get<Competition[]>("competitions");
-    return res.data;
+    return await fetchCompetitionJson<Competition[]>(getCompetitionsURL());
   } catch (err) {
     console.error("Error fetching competitions:", err);
     throw err;
@@ -20,8 +45,7 @@ export async function fetchCompetitions(): Promise<Competition[]> {
 
 export async function fetchCompetitionByID(id: string): Promise<Competition> {
   try {
-    const res = await axiosInstance.get<Competition>(`competitions/${id}`);
-    return res.data;
+    return await fetchCompetitionJson<Competition>(`${getCompetitionsURL()}/${id}`);
   } catch (err) {
     console.error("Error fetching competitions:", err);
     throw err;

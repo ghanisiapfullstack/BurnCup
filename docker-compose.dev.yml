@@ -6,8 +6,10 @@ services:
     volumes:
       - ./burncup-be:/app
     ports:
-      - "8000:8000"
+      - "8080:8080"
     command: ["air"]
+    env_file:
+      - ./burncup-be/.env.local
     depends_on:
       - frontend
       - postgres   # Add postgres as a dependency
@@ -21,9 +23,12 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
+    env_file:
+      - ./burncup-fe/.env.local
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
+      - BACKEND_INTERNAL_URL=http://backend:8080
     labels:
       - "com.microsoft.devcontainer.name=frontend"
 
@@ -37,6 +42,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
+      - ./burncup-be/TABLES.sql:/docker-entrypoint-initdb.d/01-tables.sql:ro
       - pgdata:/var/lib/postgresql/data
 
 volumes:

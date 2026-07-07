@@ -163,7 +163,7 @@ function QRCodePayment({ amount, isOpen, competition, user }: { amount: string; 
         }
 
         if (timeLeft <= 0) {
-          //await refreshQrCode()
+          await refreshQrCode()
           setTimeLeft(900)
         }
       } catch (error: any) {

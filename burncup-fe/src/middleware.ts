@@ -11,7 +11,8 @@ const adminEmails = [
   "nicolasmaulanass@gmail.com",
   "burncupbinusbekasi@gmail.com",
   "mahesaryan350@gmail.com",
-  "ghozifthr@gmail.com"
+  "ghozifthr@gmail.com",
+  "edward.matthew.tenggono@gmail.com"
 ];
 
 export async function middleware(request: NextRequest) {
