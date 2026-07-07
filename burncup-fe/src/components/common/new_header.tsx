@@ -34,6 +34,7 @@ export function Header() {
     { name: "About Us", href: "/about" },
     { name: "Competition", href: "/competition" },
     { name: "Contact Us", href: "/contact" },
+    { name: "Sponsors", href: "/sponsors" },
   ]
 
   const handleNavigation = (path: string) => {

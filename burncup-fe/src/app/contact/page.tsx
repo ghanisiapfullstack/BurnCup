@@ -38,10 +38,10 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-[#F2EDDA] transition-all duration-1000 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+    <div className={`min-h-screen bg-[#F2EDDA] transition-all duration-1000 ${isPageLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
         {/* Contact Persons Section */}
-        <section className={`mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 delay-200 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`mb-16 sm:mb-20 md:mb-24 transition-all duration-1000 delay-200 ${isPageLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#001F54] mb-4 sm:mb-6">
               Contact Persons
@@ -111,7 +111,7 @@ export default function ContactPage() {
         </section>
 
         {/* Official Contacts Section */}
-        <section className={`bg-white rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16 border border-gray-100 transition-all duration-1000 delay-400 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <section className={`bg-white rounded-2xl sm:rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16 border border-gray-100 transition-all duration-1000 delay-400 ${isPageLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#001F54] mb-4 sm:mb-6">
               Official Contacts
@@ -221,6 +221,8 @@ export default function ContactPage() {
                 <Image
                   src="/images/burncup_logo.png"
                   alt="BurnCup Logo"
+                  width={500} 
+                  height={500}
                   className="relative w-full max-w-sm lg:max-w-md h-auto object-contain group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
